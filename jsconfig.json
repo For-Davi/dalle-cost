@@ -2,7 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./resources/js/*"],
+      "@/lib/*": ["./resources/js/lib/*"]
     },
     "module": "ESNext",
     "target": "ESNext",
@@ -15,7 +16,17 @@
     "allowJs": true,
     "checkJs": false
   },
-  
-  "include": ["resources/js/**/*"],
-  "exclude": ["node_modules", "vendor", "storage", "bootstrap", "public"]
+  "include": [
+    "resources/js/**/*",
+    "resources/js/pages/**/*",
+    "resources/js/components/**/*",
+    "resources/js/lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "vendor",
+    "storage",
+    "bootstrap",
+    "public"
+  ]
 }
