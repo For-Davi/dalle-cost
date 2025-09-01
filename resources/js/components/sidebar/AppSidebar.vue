@@ -42,9 +42,9 @@
     return (
       currentRoute.value === url || currentRoute.value.startsWith(url + '/')
     )
-    const handleLogout = () => {
-      router.post(route('logout'))
-    }
+  }
+  const handleLogout = () => {
+    router.post(route('logout'))
   }
 
   const page = usePage()
