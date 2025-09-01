@@ -10,7 +10,6 @@
     DialogTrigger,
   } from '@/components/ui/dialog'
   import { Input } from '@/components/ui/input'
-  import { Label } from '@/components/ui/label'
   import { Users } from 'lucide-vue-next'
 
   defineOptions({
@@ -27,23 +26,19 @@
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Edit profile</DialogTitle>
+        <DialogTitle>Integrante</DialogTitle>
         <DialogDescription>
-          Make changes to your profile here. Click save when you're done.
+          Formulário para criação ou atualização de integrante como pagador ou
+          recebedor
         </DialogDescription>
       </DialogHeader>
       <div class="grid gap-4 py-4">
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="name" class="text-right"> Name </Label>
-          <Input id="name" value="Pedro Duarte" class="col-span-3" />
-        </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="username" class="text-right"> Username </Label>
-          <Input id="username" value="@peduarte" class="col-span-3" />
+        <div class="flex flex-col space-y-1.5">
+          <Input id="password" placeholder="Nome do integrante" />
         </div>
       </div>
       <DialogFooter>
-        <Button type="submit"> Save changes </Button>
+        <Button type="submit" class="w-full"> Salvar </Button>
       </DialogFooter>
     </DialogContent>
   </Dialog>
