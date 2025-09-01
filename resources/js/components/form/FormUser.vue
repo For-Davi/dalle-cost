@@ -18,10 +18,10 @@
     SelectValue,
   } from '@/components/ui/select'
   import { Input } from '@/components/ui/input'
-  import { Plus } from 'lucide-vue-next'
   import { Label } from '@/components/ui/label'
   import { useForm } from '@inertiajs/vue3'
   import { ref, watch, computed } from 'vue'
+  import { toast } from 'vue-sonner'
 
   defineOptions({
     name: 'FormUser',
@@ -39,7 +39,7 @@
     },
   })
 
-  const emit = defineEmits(['update:open', 'close'])
+  const emit = defineEmits(['close'])
 
   const form = useForm({
     name: '',
@@ -55,14 +55,16 @@
       form.put(route('user.update', { userID: props.user.id }), {
         onSuccess: () => {
           form.reset()
-          emit('close')
+          emit('close', false)
+          toast.success('Usuário atualizado')
         },
       })
     } else {
       form.post(route('user.store'), {
         onSuccess: () => {
           form.reset()
-          emit('close')
+          emit('close', false)
+          toast.success('Usuário criado')
         },
       })
     }
@@ -71,9 +73,8 @@
   watch(
     () => props.open,
     newVal => {
-      if (!newVal) {
-        form.reset()
-      } else if (props.user) {
+      form.reset()
+      if (props.user) {
         form.name = props.user.name
         form.email = props.user.email
         form.role = props.user.role
@@ -84,13 +85,7 @@
 </script>
 
 <template>
-  <Dialog :open="open" @update:open="value => $emit('update:open', value)">
-    <DialogTrigger as-child>
-      <Button class="cursor-pointer">
-        <Plus class="w-4 h-4 mr-2" />
-        <span>Novo usuário</span>
-      </Button>
-    </DialogTrigger>
+  <Dialog :open="open" @update:open="value => $emit('close', value)">
     <DialogContent class="sm:max-w-[425px]">
       <form @submit.prevent="submit">
         <DialogHeader>

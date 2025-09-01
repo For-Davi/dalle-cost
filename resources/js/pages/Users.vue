@@ -4,6 +4,7 @@
   import FormUser from '@/components/form/FormUser.vue'
   import { Ellipsis, Pencil, Trash } from 'lucide-vue-next'
   import { router } from '@inertiajs/vue3'
+  import { Plus } from 'lucide-vue-next'
   import {
     Table,
     TableBody,
@@ -23,6 +24,7 @@
     DropdownMenuTrigger,
   } from '@/components/ui/dropdown-menu'
   import { ref } from 'vue'
+  import { toast } from 'vue-sonner'
 
   defineOptions({
     name: 'Users',
@@ -38,19 +40,26 @@
   const dataEdit = ref(null)
   const isFormUserOpen = ref(false)
 
-  const setDataEdit = user => {
+  const setDataEdit = (user, open) => {
     dataEdit.value = user
-    isFormUserOpen.value = true
+    isFormUserOpen.value = open
   }
 
   const exclude = id => {
     if (confirm('Tem certeza que deseja excluir este usuário?')) {
       router.delete(route('user.destroy', { userID: id }))
+      toast('Sucesso', {
+        description: 'Usuário excluído',
+      })
     }
   }
 
   const getRole = role => {
     return role === 'admin' ? 'Administrador' : 'Visualizador'
+  }
+  const openCreateForm = () => {
+    dataEdit.value = null
+    isFormUserOpen.value = true
   }
 </script>
 
@@ -62,11 +71,12 @@
         <FormUser
           :user="dataEdit"
           v-model:open="isFormUserOpen"
-          @close="
-            isFormUserOpen = false
-            dataEdit = null
-          "
+          @close="setDataEdit(null, false)"
         />
+        <Button class="cursor-pointer" @click="openCreateForm">
+          <span>Novo usuário</span>
+          <Plus class="w-4 h-4 mr-2" />
+        </Button>
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
@@ -97,7 +107,7 @@
                     <DropdownMenuLabel>Opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="setDataEdit(item)">
+                      <DropdownMenuItem @click="setDataEdit(item, true)">
                         <Pencil class="w-4 h-4 mr-2" />
                         <span>Editar</span>
                       </DropdownMenuItem>
