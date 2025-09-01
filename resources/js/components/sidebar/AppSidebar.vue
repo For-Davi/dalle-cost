@@ -1,5 +1,5 @@
 <script setup>
-  import { Database, ChartColumnBig } from 'lucide-vue-next'
+  import { Database, ChartColumnBig, Users } from 'lucide-vue-next'
   import {
     Sidebar,
     SidebarContent,
@@ -28,6 +28,11 @@
       title: 'Dados',
       url: '/panel/data',
       icon: Database,
+    },
+    {
+      title: 'Usuários',
+      url: '/panel/users',
+      icon: Users,
     },
   ]
 

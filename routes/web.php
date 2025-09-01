@@ -14,3 +14,7 @@ Route::get('/panel/dashboard', function () {
 Route::get('/panel/data', function () {
     return Inertia::render('Data');
 })->name('panel.data');
+
+Route::get('/panel/users', function () {
+    return Inertia::render('Users');
+})->name('panel.users');
