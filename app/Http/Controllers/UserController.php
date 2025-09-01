@@ -30,11 +30,7 @@ class UserController
                 'role' => $request->role,
             ]);
 
-            $users = User::all();
-
-            return Inertia::render('Users', [
-                'users' => $users,
-            ]);
+            return redirect()->route('user.index')->with('success', 'Usuário criado');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -54,12 +50,7 @@ class UserController
             
             $user->save();
 
-            $users = User::all();
-
-            return Inertia::render('Users', [
-                'users' => $users,
-                'message' => 'Usuário atualizado',
-            ]);
+            return redirect()->route('user.index')->with('success', 'Usuário atualizado');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -74,12 +65,7 @@ class UserController
             $user = User::findOrFail($userId);
             $user->delete();
 
-            $users = User::all();
-
-            return Inertia::render('Users', [
-                'users' => $users,
-                'message' => 'Usuário excluído',
-            ]);
+            return redirect()->route('user.index')->with('success', 'Usuário excluído');
 
         } catch (Exception $e) {
             return back()->withErrors([

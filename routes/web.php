@@ -20,9 +20,10 @@ Route::middleware(['auth'])->group(function () {
     // ⚒️ ACTIONS
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::prefix('user')->group(function () {
-        Route::get('/', [UserController::class, 'index'])->name('user-index');
-        Route::put('/', [UserController::class, 'store'])->name('user-store');
-        Route::delete('/{userID}', [UserController::class, 'destroy'])->name('user-destroy');
+        Route::get('/', [UserController::class, 'index'])->name('user.index');
+        Route::post('/', [UserController::class, 'store'])->name('user.store');
+        Route::put('/', [UserController::class, 'store'])->name('user.update');
+        Route::delete('/{userID}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 
     //🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
