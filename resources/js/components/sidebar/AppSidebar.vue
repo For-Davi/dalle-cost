@@ -1,5 +1,12 @@
 <script setup>
-  import { Database, ChartColumnBig, Users, LogOut } from 'lucide-vue-next'
+  import {
+    Database,
+    ChartColumnBig,
+    Users,
+    LogOut,
+    CreditCard,
+    ShieldUser,
+  } from 'lucide-vue-next'
   import {
     Sidebar,
     SidebarContent,
@@ -32,9 +39,19 @@
       icon: Database,
     },
     {
+      title: 'Integrantes',
+      url: '/panel/members',
+      icon: Users,
+    },
+    {
+      title: 'Origens',
+      url: '/panel/origin',
+      icon: CreditCard,
+    },
+    {
       title: 'Usuários',
       url: '/panel/users',
-      icon: Users,
+      icon: ShieldUser,
     },
   ]
 

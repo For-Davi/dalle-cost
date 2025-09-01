@@ -8,7 +8,6 @@ use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use Log;
 
 class UserController
 {
@@ -54,7 +53,6 @@ class UserController
             return redirect()->route('panel.users')->with('success', 'Usuário atualizado');
 
         } catch (Exception $e) {
-            Log::info($e->getMessage());
             return back()->withErrors([
                 'error' => 'Ocorreu um erro ao atualizar. Por favor, tente novamente.',
             ]);

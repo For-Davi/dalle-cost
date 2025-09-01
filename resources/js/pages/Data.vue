@@ -1,7 +1,7 @@
 <script setup>
   import PanelLayout from '@/layout/PanelLayout.vue'
   import Button from '@/components/ui/button/Button.vue'
-  import FormIntegral from '@/components/form/FormIntegral.vue'
+  import FormIntegral from '@/components/form/FormMember.vue'
   import FormRegister from '@/components/form/FormRegister.vue'
   import FormOrigin from '@/components/form/FormOrigin.vue'
 
