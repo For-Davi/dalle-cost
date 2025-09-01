@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class Member extends Authenticatable
+class Origin extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $table = 'members';
+    protected $table = 'origins';
 
     protected $fillable = [
         'name',

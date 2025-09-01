@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
@@ -33,6 +34,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{memberID}', [MemberController::class, 'destroy'])->name('member.destroy');
     });
 
+    Route::prefix('category')->group(function () {
+        Route::post('/', [CategoryController::class, 'store'])->name('category.store');
+        Route::put('/{categoryID}', [CategoryController::class, 'update'])->name('category.update');
+        Route::delete('/{categoryID}', [CategoryController::class, 'destroy'])->name('category.destroy');
+    });
+
     //🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
 
     // 🖥️ VIEWS
@@ -47,6 +54,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panel/users', [UserController::class, 'index'])->name('panel.users');
 
     Route::get('/panel/members', [MemberController::class, 'index'])->name('panel.members');
+
+    Route::get('/panel/category', [CategoryController::class, 'index'])->name('panel.category');
 });
 
 

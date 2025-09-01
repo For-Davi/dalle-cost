@@ -6,6 +6,7 @@
     LogOut,
     CreditCard,
     ShieldUser,
+    List,
   } from 'lucide-vue-next'
   import {
     Sidebar,
@@ -47,6 +48,11 @@
       title: 'Origens',
       url: '/panel/origin',
       icon: CreditCard,
+    },
+    {
+      title: 'Categorias',
+      url: '/panel/category',
+      icon: List,
     },
     {
       title: 'Usuários',
