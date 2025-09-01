@@ -9,8 +9,17 @@
     DialogTitle,
     DialogTrigger,
   } from '@/components/ui/dialog'
+  import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+  } from '@/components/ui/select'
   import { Input } from '@/components/ui/input'
   import { Plus } from 'lucide-vue-next'
+  import { Label } from '@/components/ui/label'
 
   defineOptions({
     name: 'FormUser',
@@ -21,12 +30,12 @@
   <Dialog>
     <DialogTrigger as-child>
       <Button class="cursor-pointer">
-        Novo usuário <Plus class="w-4 h-4 mr-2" />
+        <span>Novo usuário</span> <Plus class="w-4 h-4 mr-2" />
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Usuário</DialogTitle>
+        <DialogTitle class="font-bold">Usuário</DialogTitle>
         <DialogDescription>
           Formulário para criação ou atualização de usuário com acesso ao
           sistema
@@ -34,13 +43,34 @@
       </DialogHeader>
       <div class="grid gap-4 py-4">
         <div class="flex flex-col space-y-1.5">
-          <Input placeholder="E-mail" />
+          <Label for="email">E-mail</Label>
+          <Input id="email" placeholder="E-mail" />
         </div>
         <div class="flex flex-col space-y-1.5">
-          <Input placeholder="Senha" />
+          <Label for="password">Senha</Label>
+          <Input id="password" placeholder="Senha" type="password" />
         </div>
         <div class="flex flex-col space-y-1.5">
-          <Input placeholder="Confirme a senha" />
+          <Label for="confirm-password">Confirme a Senha</Label>
+          <Input
+            id="confirm-password"
+            placeholder="Confirme a senha"
+            type="password"
+          />
+        </div>
+        <div class="flex flex-col space-y-1.5">
+          <Label>Nível de Acesso</Label>
+          <Select>
+            <SelectTrigger class="w-full">
+              <SelectValue placeholder="Selecione um tipo de acesso" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="administrador">Administrador</SelectItem>
+                <SelectItem value="visualizador">Visualizador</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
         </div>
       </div>
       <DialogFooter>
