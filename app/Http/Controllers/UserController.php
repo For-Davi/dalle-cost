@@ -31,7 +31,7 @@ class UserController
                 'role' => $request->role,
             ]);
 
-            return redirect()->route('user.index')->with('success', 'Usuário criado');
+            return redirect()->route('panel.users')->with('success', 'Usuário criado');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -51,7 +51,7 @@ class UserController
             
             $user->save();
 
-            return redirect()->route('user.index')->with('success', 'Usuário atualizado');
+            return redirect()->route('panel.users')->with('success', 'Usuário atualizado');
 
         } catch (Exception $e) {
             Log::info($e->getMessage());
@@ -67,7 +67,7 @@ class UserController
             $user = User::findOrFail($userId);
             $user->delete();
 
-            return redirect()->route('user.index')->with('success', 'Usuário excluído');
+            return redirect()->route('panel.users')->with('success', 'Usuário excluído');
 
         } catch (Exception $e) {
             return back()->withErrors([

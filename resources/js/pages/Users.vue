@@ -48,9 +48,7 @@
   const exclude = id => {
     if (confirm('Tem certeza que deseja excluir este usuário?')) {
       router.delete(route('user.destroy', { userID: id }))
-      toast('Sucesso', {
-        description: 'Usuário excluído',
-      })
+      toast.success('Usuário excluído')
     }
   }
 
