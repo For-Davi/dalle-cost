@@ -1,16 +1,16 @@
 <script setup>
-import { computed } from "vue";
-import { cn } from "@/lib/utils";
-import { Skeleton } from '@/components/ui/skeleton';
+  import { computed } from 'vue'
+  import { cn } from '@/lib/utils'
+  import { Skeleton } from '@/components/ui/skeleton'
 
-const props = defineProps({
-  showIcon: { type: Boolean, required: false },
-  class: { type: null, required: false },
-});
+  const props = defineProps({
+    showIcon: { type: Boolean, required: false },
+    class: { type: null, required: false },
+  })
 
-const width = computed(() => {
-  return `${Math.floor(Math.random() * 40) + 50}%`;
-});
+  const width = computed(() => {
+    return `${Math.floor(Math.random() * 40) + 50}%`
+  })
 </script>
 
 <template>

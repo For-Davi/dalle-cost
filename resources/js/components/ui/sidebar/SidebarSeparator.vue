@@ -1,10 +1,10 @@
 <script setup>
-import { cn } from "@/lib/utils";
-import { Separator } from '@/components/ui/separator';
+  import { cn } from '@/lib/utils'
+  import { Separator } from '@/components/ui/separator'
 
-const props = defineProps({
-  class: { type: null, required: false },
-});
+  const props = defineProps({
+    class: { type: null, required: false },
+  })
 </script>
 
 <template>

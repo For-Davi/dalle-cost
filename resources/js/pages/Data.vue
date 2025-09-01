@@ -1,9 +1,9 @@
 <script setup>
-import PanelLayout from '@/layout/PanelLayout.vue'
+  import PanelLayout from '@/layout/PanelLayout.vue'
 
-defineOptions({
-  name: 'Data',
-});
+  defineOptions({
+    name: 'Data',
+  })
 </script>
 
 <template>

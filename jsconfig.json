@@ -22,11 +22,5 @@
     "resources/js/components/**/*",
     "resources/js/lib/**/*"
   ],
-  "exclude": [
-    "node_modules",
-    "vendor",
-    "storage",
-    "bootstrap",
-    "public"
-  ]
+  "exclude": ["node_modules", "vendor", "storage", "bootstrap", "public"]
 }

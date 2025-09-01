@@ -1,21 +1,20 @@
 <script setup>
-import FormAuth from "@/components/form/FormAuth.vue"
-import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+  import FormAuth from '@/components/form/FormAuth.vue'
+  import { Button } from '@/components/ui/button'
+  import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+  } from '@/components/ui/card'
+  import { Input } from '@/components/ui/input'
+  import { Label } from '@/components/ui/label'
 
-defineOptions({
-  name: 'Auth',
-});
-
+  defineOptions({
+    name: 'Auth',
+  })
 </script>
 
 <template>

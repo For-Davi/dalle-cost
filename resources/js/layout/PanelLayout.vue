@@ -1,10 +1,10 @@
 <script setup>
-import AppSidebar from '@/components/sidebar/AppSidebar.vue'
-import { SidebarProvider } from '@/components/ui/sidebar'
+  import AppSidebar from '@/components/sidebar/AppSidebar.vue'
+  import { SidebarProvider } from '@/components/ui/sidebar'
 
-defineOptions({
-  name: 'PanelLayout',
-});
+  defineOptions({
+    name: 'PanelLayout',
+  })
 </script>
 
 <template>
