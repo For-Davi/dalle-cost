@@ -21,11 +21,25 @@
   import { Plus } from 'lucide-vue-next'
   import { Label } from '@/components/ui/label'
   import { useForm } from '@inertiajs/vue3'
-  import { ref } from 'vue'
+  import { ref, watch, computed } from 'vue'
 
   defineOptions({
     name: 'FormUser',
   })
+
+  const props = defineProps({
+    user: {
+      type: Object,
+      required: false,
+      default: null,
+    },
+    open: {
+      type: Boolean,
+      default: false,
+    },
+  })
+
+  const emit = defineEmits(['update:open', 'close'])
 
   const form = useForm({
     name: '',
@@ -33,38 +47,71 @@
     password: '',
     role: '',
   })
-  const open = ref(false)
+
+  const isEditing = computed(() => !!props.user)
 
   const submit = () => {
-    form.post(route('user.store'), {
-      onSuccess: () => {
-        form.reset()
-        open.value = false
-      },
-    })
+    if (isEditing.value) {
+      form.put(route('user.update', { userID: props.user.id }), {
+        onSuccess: () => {
+          form.reset()
+          emit('close')
+        },
+      })
+    } else {
+      form.post(route('user.store'), {
+        onSuccess: () => {
+          form.reset()
+          emit('close')
+        },
+      })
+    }
   }
+
+  watch(
+    () => props.open,
+    newVal => {
+      if (!newVal) {
+        form.reset()
+      } else if (props.user) {
+        form.name = props.user.name
+        form.email = props.user.email
+        form.role = props.user.role
+        form.password = ''
+      }
+    }
+  )
 </script>
 
 <template>
-  <Dialog v-model:open="open">
+  <Dialog :open="open" @update:open="value => $emit('update:open', value)">
     <DialogTrigger as-child>
       <Button class="cursor-pointer">
-        <span>Novo usuário</span> <Plus class="w-4 h-4 mr-2" />
+        <Plus class="w-4 h-4 mr-2" />
+        <span>Novo usuário</span>
       </Button>
     </DialogTrigger>
     <DialogContent class="sm:max-w-[425px]">
       <form @submit.prevent="submit">
         <DialogHeader>
-          <DialogTitle class="font-bold">Usuário</DialogTitle>
+          <DialogTitle class="font-bold">
+            {{ isEditing ? 'Editar Usuário' : 'Novo Usuário' }}
+          </DialogTitle>
           <DialogDescription>
-            Formulário para criação ou atualização de usuário com acesso ao
-            sistema
+            {{
+              isEditing
+                ? 'Atualize os dados do usuário'
+                : 'Crie um novo usuário com acesso ao sistema'
+            }}
           </DialogDescription>
         </DialogHeader>
         <div class="grid gap-4 py-4">
           <div class="flex flex-col space-y-1.5">
             <Label for="name">Nome</Label>
             <Input id="name" placeholder="Nome completo" v-model="form.name" />
+            <span v-if="form.errors.name" class="text-red-500 text-sm">
+              {{ form.errors.name }}
+            </span>
           </div>
 
           <div class="flex flex-col space-y-1.5">
@@ -75,7 +122,7 @@
             </span>
           </div>
 
-          <div class="flex flex-col space-y-1.5">
+          <div v-if="!props.user" class="flex flex-col space-y-1.5">
             <Label for="password">Senha</Label>
             <Input
               id="password"
@@ -86,7 +133,11 @@
             <span v-if="form.errors.password" class="text-red-500 text-sm">
               {{ form.errors.password }}
             </span>
+            <p v-if="isEditing" class="text-xs text-gray-500">
+              Deixe em branco para manter a senha atual
+            </p>
           </div>
+
           <div class="flex flex-col space-y-1.5">
             <Label>Nível de Acesso</Label>
             <Select v-model="form.role">
@@ -108,7 +159,7 @@
 
         <DialogFooter>
           <Button type="submit" class="w-full" :disabled="form.processing">
-            Salvar
+            {{ isEditing ? 'Atualizar' : 'Salvar' }}
           </Button>
         </DialogFooter>
       </form>

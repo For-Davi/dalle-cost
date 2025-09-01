@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('user')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('user.index');
         Route::post('/', [UserController::class, 'store'])->name('user.store');
-        Route::put('/', [UserController::class, 'store'])->name('user.update');
+        Route::put('/{userID}', [UserController::class, 'update'])->name('user.update');
         Route::delete('/{userID}', [UserController::class, 'destroy'])->name('user.destroy');
     });
 

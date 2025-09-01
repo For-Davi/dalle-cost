@@ -8,6 +8,7 @@ use Exception;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Log;
 
 class UserController
 {
@@ -42,9 +43,9 @@ class UserController
     public function update(UpdateUserRequest $request)
     {
         try {
-            $user = User::findOrFail($request->id);
+            $user = User::findOrFail($request->route('userID'));
 
-            $user->name = $request->name;
+;            $user->name = $request->name;
             $user->email = $request->email;
             $user->role = $request->role;
             
@@ -53,6 +54,7 @@ class UserController
             return redirect()->route('user.index')->with('success', 'Usuário atualizado');
 
         } catch (Exception $e) {
+            Log::info($e->getMessage());
             return back()->withErrors([
                 'error' => 'Ocorreu um erro ao atualizar. Por favor, tente novamente.',
             ]);
