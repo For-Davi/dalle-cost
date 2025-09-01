@@ -9,7 +9,7 @@ defineOptions({
 
 <template>
   <SidebarProvider>
-    <div class="flex h-screen bg-gray-50">
+    <div class="flex h-screen w-screen bg-gray-50">
       <AppSidebar />
       <main class="flex-1 overflow-auto">
         <slot />

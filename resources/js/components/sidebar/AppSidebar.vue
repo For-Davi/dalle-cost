@@ -1,5 +1,5 @@
 <script setup>
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-vue-next"
+import { Database, ChartColumnBig} from "lucide-vue-next"
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +11,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { computed } from "vue";
 
 defineOptions({
   name: 'AppSidebar',
@@ -21,14 +22,21 @@ const items = [
   {
     title: "Dashboard",
     url: '/panel/dashboard',
-    icon: Home,
+    icon: ChartColumnBig,
   },
   {
     title: "Dados",
     url: "/panel/data",
-    icon: Inbox,
+    icon: Database,
   },
 ];
+
+const isActive = (url) => {
+  return currentRoute.value === url || currentRoute.value.startsWith(url + '/')
+}
+
+const page = usePage()
+const currentRoute = computed(() => page.url)
 </script>
 
 <template>
@@ -43,9 +51,9 @@ const items = [
           <SidebarMenu>
             <SidebarMenuItem v-for="item in items" :key="item.title">
               <SidebarMenuButton asChild>
-                <Link :href="item.url" class="flex items-center gap-2">
-                  <component :is="item.icon" class="w-4 h-4" />
-                  <span>{{ item.title }}</span>
+                <Link :href="item.url" class="flex items-center gap-2" :class="isActive(item.url) ? 'font-bold text-primary' : 'text-muted-foreground'">
+                  <component :is="item.icon" class="w-4 h-4" :class="isActive(item.url) ? 'text-primary' : ''"/>
+                  <span class="text-base">{{ item.title }}</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>

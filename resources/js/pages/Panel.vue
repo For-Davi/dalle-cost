@@ -1,5 +1,5 @@
 <script setup>
-import Layout from '@/layout/PanelLayout.vue'
+import PanelLayout from '@/layout/PanelLayout.vue'
 
 defineOptions({
   name: 'Panel',
@@ -7,7 +7,7 @@ defineOptions({
 </script>
 
 <template>
-  <Layout>
+  <PanelLayout>
     <div class="p-6">
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -25,5 +25,5 @@ defineOptions({
         </div>
       </div>
     </div>
-  </Layout>
+  </PanelLayout>
 </template>
