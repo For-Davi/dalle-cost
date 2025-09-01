@@ -16,7 +16,7 @@ class AuthController
         try {
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
-                return redirect()->intended('panel.dashboard');
+                return redirect()->route('panel.dashboard');
             }
         } catch (Exception $e) {
             return back()->withErrors([

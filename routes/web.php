@@ -8,10 +8,10 @@ use App\Http\Controllers\UserController;
 // 🖥️ VIEWS
 Route::get('/', function () {
     return Inertia::render('Auth');
-})->name('auth');
+})->name('login');
 
  // ⚒️ ACTIONS
-Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 
 
 
@@ -20,9 +20,9 @@ Route::middleware(['auth'])->group(function () {
     // ⚒️ ACTIONS
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
     Route::prefix('user')->group(function () {
-        Route::post('/', [AuthController::class, 'store'])->name('store');
-        Route::put('/', [UserController::class, 'store'])->name('store');
-        Route::delete('/{userID}', [UserController::class, 'destroy'])->name('destroy');
+        Route::get('/', [UserController::class, 'index'])->name('user-index');
+        Route::put('/', [UserController::class, 'store'])->name('user-store');
+        Route::delete('/{userID}', [UserController::class, 'destroy'])->name('user-destroy');
     });
 
     //🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
@@ -36,9 +36,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Data');
     })->name('panel.data');
 
-    Route::get('/panel/users', function () {
-        return Inertia::render('Users');
-    })->name('panel.users');
+    Route::get('/panel/users', [UserController::class, 'index'])->name('panel.users');
 });
 
 

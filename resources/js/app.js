@@ -14,10 +14,10 @@ createInertiaApp({
     ),
   setup({ el, App, props, plugin }) {
     const app = createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .mount(el)
 
-    app.component('InertiaLink', Link)
+    app.use(plugin).component('InertiaLink', Link)
+
+    app.mount(el)
 
     return app
   },
