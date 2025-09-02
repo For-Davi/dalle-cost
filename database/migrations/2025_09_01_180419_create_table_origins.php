@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('origins', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('payday');
             $table->unsignedBigInteger('member_id')->nullable();
             $table->foreign('member_id')->references('id')->on('members');
             $table->timestamps();

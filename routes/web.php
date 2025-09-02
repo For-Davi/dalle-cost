@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\OriginController;
 
 // 🖥️ VIEWS
 Route::get('/', function () {
@@ -40,6 +41,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{categoryID}', [CategoryController::class, 'destroy'])->name('category.destroy');
     });
 
+    Route::prefix('origin')->group(function () {
+        Route::post('/', [OriginController::class, 'store'])->name('origin.store');
+        Route::put('/{originID}', [OriginController::class, 'update'])->name('origin.update');
+        Route::delete('/{originID}', [OriginController::class, 'destroy'])->name('origin.destroy');
+    });
+
     //🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹🔹
 
     // 🖥️ VIEWS
@@ -56,6 +63,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/panel/members', [MemberController::class, 'index'])->name('panel.members');
 
     Route::get('/panel/category', [CategoryController::class, 'index'])->name('panel.category');
+
+    Route::get('/panel/origin', [OriginController::class, 'index'])->name('panel.origin');
 });
 
 

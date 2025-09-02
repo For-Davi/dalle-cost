@@ -15,6 +15,13 @@ class Origin extends Authenticatable
 
     protected $fillable = [
         'name',
+        'payday',
+        'member_id'
     ];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class, 'member_id');
+    }
 
 }

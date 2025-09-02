@@ -19,7 +19,7 @@
   } from '@/components/ui/select'
   import { Input } from '@/components/ui/input'
   import { Label } from '@/components/ui/label'
-  import { useForm } from '@inertiajs/vue3'
+  import { router, useForm } from '@inertiajs/vue3'
   import { ref, watch, computed } from 'vue'
   import { toast } from 'vue-sonner'
 
