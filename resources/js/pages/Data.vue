@@ -61,7 +61,7 @@
   }
   const exclude = id => {
     if (confirm('Tem certeza que deseja excluir esta movimentação?')) {
-      router.delete(route('data.destroy', { movementID: id }))
+      router.delete(route('data.destroy', { dataID: id }))
       toast.success('Movimentação excluída')
     }
   }

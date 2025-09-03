@@ -20,7 +20,7 @@ class UpdateMovementRequest extends FormRequest
                 'required',
                 'regex:/^(0[1-9]|1[0-2])\/\d{4}$/', // mm/yyyy
             ],
-            'date_buy' => [
+            'dateBuy' => [
                 'required',
                 'regex:/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/', // dd/mm/yyyy
             ],
@@ -49,8 +49,8 @@ class UpdateMovementRequest extends FormRequest
 
             'categoryID.exists'   => 'A categoria selecionada não existe.',
 
-            'date_buy.required' => 'A data de compra é obrigatória',
-            'date_buy.regex'    => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
+            'dateBuy.required' => 'A data de compra é obrigatória',
+            'dateBuy.regex'    => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
 
             'description.string' => 'A descrição deve ser um texto válido.',
         ];

@@ -62,6 +62,7 @@
     value: '',
     period: '',
     dateBuy: '',
+    quantity: 1,
     description: '',
     memberID: null,
     originID: null,
@@ -178,9 +179,9 @@
     newVal => {
       form.reset()
       if (props.movement) {
-        form.value = props.origin.value
-        form.period = props.origin.period
-        form.description = props.origin.description ?? ''
+        form.value = props.movement.value
+        form.period = props.movement.period
+        form.description = props.movement.description ?? ''
         form.memberID = props.movement.member_id
         form.originID = props.movement.origin_id
         form.categoryID = props.movement.category_id
@@ -244,6 +245,34 @@
               />
               <span v-if="form.errors.period" class="text-red-500 text-sm">
                 {{ form.errors.period }}
+              </span>
+            </div>
+            <div v-if="!props.movement" class="flex flex-col space-y-1.5">
+              <Label>Quantidade de lançamentos</Label>
+              <Select v-model="form.quantity">
+                <SelectTrigger class="w-full">
+                  <SelectValue placeholder="Selecione um devedor" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem :value="1">Apenas 1</SelectItem>
+                    <SelectItem :value="2">...2</SelectItem>
+                    <SelectItem :value="3">...3</SelectItem>
+                    <SelectItem :value="4">...4</SelectItem>
+                    <SelectItem :value="5">...5</SelectItem>
+                    <SelectItem :value="6">...6</SelectItem>
+                    <SelectItem :value="7">...7</SelectItem>
+                    <SelectItem :value="8">...8</SelectItem>
+                    <SelectItem :value="9">...9</SelectItem>
+                    <SelectItem :value="10">...10</SelectItem>
+                    <SelectItem :value="11">...11</SelectItem>
+                    <SelectItem :value="12">...12</SelectItem>
+                    
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+              <span v-if="form.errors.memberID" class="text-red-500 text-sm">
+                {{ form.errors.memberID }}
               </span>
             </div>
             <div class="flex flex-col space-y-1.5">
