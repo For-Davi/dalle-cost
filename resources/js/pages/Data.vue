@@ -81,11 +81,11 @@
       <h1 class="text-2xl font-bold mb-6">Dados</h1>
       <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
         <FormMovement
+          :open="isFormMovementOpen"
           :movement="dataEdit"
           :members="members"
           :origins="origins"
           :categories="categories"
-          v-model:open="isFormMovementOpen"
           @close="setDataEdit(null, false)"
         />
         <Button class="cursor-pointer" @click="openCreateForm">
