@@ -22,10 +22,12 @@
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from '@/components/ui/dropdown-menu'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import { toast } from 'vue-sonner'
   import FormMovement from '@/components/form/FormMovement.vue'
   import MovementDetails from '@/components/general/MovementDetails.vue'
+  import { Search } from 'lucide-vue-next'
+  import { Input } from '@/components/ui/input'
 
   defineOptions({
     name: 'Data',
@@ -50,6 +52,7 @@
     },
   })
 
+  const search = ref('')
   const dataEdit = ref(null)
   const isFormMovementOpen = ref(false)
   const dataMovement = ref(null)
@@ -80,6 +83,26 @@
       currency: 'BRL',
     })
   }
+
+  const getMovements = computed(() => {
+    if (search.value !== '') {
+      return props.movements.filter(item => {
+        const query = search.value.toLowerCase()
+
+        return (
+          item.date_buy?.toLowerCase().includes(query) ||
+          item.period?.toLowerCase().includes(query) ||
+          item.value?.toString().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.category?.name?.toLowerCase().includes(query) ||
+          item.member?.name?.toLowerCase().includes(query) ||
+          item.origin?.name?.toLowerCase().includes(query)
+        )
+      })
+    }
+
+    return props.movements
+  })
 </script>
 
 <template>
@@ -95,6 +118,20 @@
           :categories="categories"
           @close="setDataEdit(null, false)"
         />
+        <div class="relative w-full max-w-sm items-center">
+          <Input
+            id="search"
+            type="text"
+            v-model="search"
+            placeholder="Filtre os resultados"
+            class="pl-10"
+          />
+          <span
+            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+          >
+            <Search class="size-4 text-muted-foreground" />
+          </span>
+        </div>
         <Button class="cursor-pointer" @click="openCreateForm">
           <span>Novo lançamento</span>
           <Plus class="w-4 h-4 mr-2" />
@@ -106,6 +143,7 @@
           <TableHeader>
             <TableRow>
               <TableHead class="pl-8"> Data de compra </TableHead>
+              <TableHead class="pl-8"> Período </TableHead>
               <TableHead class="pl-8"> Devedor </TableHead>
               <TableHead class="pl-8"> Origem </TableHead>
               <TableHead class="pl-8"> Categoria </TableHead>
@@ -114,9 +152,12 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="(item, index) in movements" :key="index">
+            <TableRow v-for="(item, index) in getMovements" :key="index">
               <TableCell class="pl-8">
                 {{ item.date_buy }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ item.period }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
