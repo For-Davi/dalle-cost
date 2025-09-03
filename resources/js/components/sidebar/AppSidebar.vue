@@ -33,31 +33,37 @@
       title: 'Dashboard',
       url: '/panel/dashboard',
       icon: ChartColumnBig,
+      type: 'dashboard',
     },
     {
       title: 'Dados',
       url: '/panel/data',
       icon: Database,
+      type: 'data',
     },
     {
       title: 'Integrantes',
       url: '/panel/members',
       icon: Users,
+      type: 'members',
     },
     {
       title: 'Origens',
       url: '/panel/origin',
       icon: CreditCard,
+      type: 'origin',
     },
     {
       title: 'Categorias',
       url: '/panel/category',
       icon: List,
+      type: 'category',
     },
     {
       title: 'Usuários',
       url: '/panel/users',
       icon: ShieldUser,
+      type: 'users',
     },
   ]
 
@@ -66,26 +72,39 @@
       currentRoute.value === url || currentRoute.value.startsWith(url + '/')
     )
   }
+  const showOption = type => {
+    if (user.value.role === 'viewer') {
+      if (type !== 'dashboard') {
+        return false
+      }
+    }
+    return true
+  }
   const handleLogout = () => {
     router.post(route('logout'))
   }
 
   const page = usePage()
   const currentRoute = computed(() => page.url)
+  const user = computed(() => page.props.auth.user)
 </script>
 
 <template>
   <Sidebar class="border-r h-screen flex flex-col">
     <SidebarHeader class="p-4 border-b">
       <h2 class="text-xl font-semibold">Dalle Cost</h2>
-      <p class="text-sm text-muted-foreground">Painel Administrativo</p>
+      <p class="text-sm text-muted-foreground">Usuário: {{ user.name }}</p>
     </SidebarHeader>
 
     <SidebarContent class="flex-1">
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarMenuItem v-for="item in items" :key="item.title">
+            <SidebarMenuItem
+              v-for="item in items"
+              :key="item.title"
+              v-show="showOption(item.type)"
+            >
               <SidebarMenuButton asChild>
                 <Link
                   :href="item.url"
