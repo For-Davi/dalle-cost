@@ -17,7 +17,11 @@ class DataController
 
     public function index()
     {
-        $movements = Movement::with(['member', 'origin', 'category'])->get();
+        $movements = Movement::with(['member', 'origin', 'category'])
+        ->orderByRaw("SUBSTRING_INDEX(date_buy, '/', -1) DESC")
+        ->orderByRaw("LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(date_buy, '/', -2), '/', 1), 2, '0') DESC")
+        ->orderByRaw("LPAD(SUBSTRING_INDEX(date_buy, '/', 1), 2, '0') DESC")
+        ->get();
         $origins = Origin::with('member')->get();
         $members = Member::all();
         $categories = Category::all();

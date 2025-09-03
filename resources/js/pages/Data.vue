@@ -73,6 +73,13 @@
     dataEdit.value = null
     isFormMovementOpen.value = true
   }
+  const formatCurrency = value => {
+    if (value === null || value === undefined) return 'R$ 0,00'
+    return Number(value).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    })
+  }
 </script>
 
 <template>
@@ -98,7 +105,7 @@
           <TableCaption>Lista de movimentações</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="pl-8"> Período </TableHead>
+              <TableHead class="pl-8"> Data de compra </TableHead>
               <TableHead class="pl-8"> Devedor </TableHead>
               <TableHead class="pl-8"> Origem </TableHead>
               <TableHead class="pl-8"> Categoria </TableHead>
@@ -109,7 +116,7 @@
           <TableBody>
             <TableRow v-for="(item, index) in movements" :key="index">
               <TableCell class="pl-8">
-                {{ item.period }}
+                {{ item.date_buy }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
@@ -121,7 +128,7 @@
                 {{ item.category ? item.category.name : 'Sem categoria' }}
               </TableCell>
               <TableCell class="pl-8">
-                {{ item.value }}
+                {{ formatCurrency(item.value) }}
               </TableCell>
               <TableCell class="pr-8 text-right">
                 <DropdownMenu>
@@ -158,7 +165,7 @@
         </Table>
       </section>
       <MovementDetails
-        :data="dataMovement"
+        :movement="dataMovement"
         v-model:open="showMovementDetails"
         @close="showMovement(false, null)"
       />

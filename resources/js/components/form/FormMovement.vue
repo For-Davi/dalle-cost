@@ -267,7 +267,6 @@
                     <SelectItem :value="10">...10</SelectItem>
                     <SelectItem :value="11">...11</SelectItem>
                     <SelectItem :value="12">...12</SelectItem>
-                    
                   </SelectGroup>
                 </SelectContent>
               </Select>
