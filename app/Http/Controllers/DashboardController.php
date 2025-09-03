@@ -14,7 +14,7 @@ class DashboardController
         $origins = Origin::with('member')->get();
         $members = Member::all();
         
-        return Inertia::render('Origins', [
+        return Inertia::render('Panel', [
             'origins' => $origins,
             'members' => $members
         ]);

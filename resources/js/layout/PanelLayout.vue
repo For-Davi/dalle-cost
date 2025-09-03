@@ -1,6 +1,6 @@
 <script setup>
   import AppSidebar from '@/components/sidebar/AppSidebar.vue'
-  import { SidebarProvider } from '@/components/ui/sidebar'
+  import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar'
   import { Toaster } from '@/components/ui/sonner'
   import 'vue-sonner/style.css'
 
@@ -15,6 +15,7 @@
     <div class="flex h-screen w-screen bg-gray-50">
       <AppSidebar />
       <main class="flex-1 overflow-auto">
+        <SidebarTrigger />
         <slot />
       </main>
     </div>

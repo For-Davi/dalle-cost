@@ -59,9 +59,6 @@ Route::middleware(['auth'])->group(function () {
 
     // 🖥️ VIEWS
     Route::get('/panel/dashboard', [DashboardController::class, 'index'])->name('panel.dashboard');
-    // Route::get('/panel/dashboard', function () {
-    //     return Inertia::render('Panel');
-    // })->name('panel.dashboard');
 
     Route::middleware(['admin'])->prefix('panel')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('panel.users');
@@ -69,9 +66,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/category', [CategoryController::class, 'index'])->name('panel.category');
         Route::get('/origin', [OriginController::class, 'index'])->name('panel.origin');
         Route::get('/data', [DataController::class, 'index'])->name('panel.data');
-        // Route::get('/data', function () {
-        //     return Inertia::render('Data');
-        // })->name('panel.data');
     });
 });
 
