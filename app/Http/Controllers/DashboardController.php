@@ -16,17 +16,25 @@ class DashboardController
     {
         $user = Auth::user();
 
-        $members = $user && $user->role === 'admin'
-            ? Member::all()
-            : collect([]);
+        if ($user->role === 'admin') {
+            $members    = Member::all();
+            $origins    = Origin::with('member')->get();
+            $categories = Category::all();
+        } else {
+            // Recupera somente os movements que pertencem ao usuário autenticado
+            $userMovements = Movement::where('member_id', $user->id)->get();
 
-        $origins = $user && $user->role === 'admin'
-            ? Origin::with('member')->get()
-            : collect([]);
+            // IDs de categories e origins utilizadas
+            $categoryIds = $userMovements->pluck('category_id')->unique();
+            $originIds   = $userMovements->pluck('origin_id')->unique();
 
-        $categories = $user && $user->role === 'admin'
-            ? Category::all()
-            : collect([]);
+            // Filtra apenas as relacionadas
+            $categories = Category::whereIn('id', $categoryIds)->get();
+            $origins    = Origin::whereIn('id', $originIds)->with('member')->get();
+
+            // Usuário comum não precisa de lista de todos os members
+            $members = collect([]);
+        }
 
         $years = Movement::query()
             ->when(
@@ -43,13 +51,12 @@ class DashboardController
             fn($q) => $q->where('member_id', $user->id)
         )->get();
 
-        
         return Inertia::render('Panel', [
-            'origins' => $origins,
-            'members' => $members,
+            'origins'    => $origins,
+            'members'    => $members,
             'categories' => $categories,
-            'years' => $years,
-            'movements' => $movements
+            'years'      => $years,
+            'movements'  => $movements,
         ]);
     }
 
