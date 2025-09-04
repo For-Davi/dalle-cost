@@ -32,7 +32,7 @@ class OriginController
                 'payday' => $request->payday,
             ]);
 
-            return redirect()->route('panel.origin')->with('success', 'Origem criada');
+            return redirect()->route('panel.origins')->with('success', 'Origem criada');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -52,7 +52,7 @@ class OriginController
             
             $origin->save();
 
-            return redirect()->route('panel.origin')->with('success', 'Origem atualizada');
+            return redirect()->route('panel.origins')->with('success', 'Origem atualizada');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -67,7 +67,7 @@ class OriginController
             $origin = Origin::findOrFail($originID);
             $origin->delete();
 
-            return redirect()->route('panel.origin')->with('success', 'Origem excluída');
+            return redirect()->route('panel.origins')->with('success', 'Origem excluída');
 
         } catch (Exception $e) {
             return back()->withErrors([

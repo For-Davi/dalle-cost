@@ -27,7 +27,6 @@ class UserController
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'role' => $request->role,
             ]);
 
             return redirect()->route('panel.users')->with('success', 'Usuário criado');

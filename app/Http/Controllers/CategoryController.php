@@ -27,7 +27,7 @@ class CategoryController
                 'name' => $request->name,
             ]);
 
-            return redirect()->route('panel.category')->with('success', 'Categoria criada');
+            return redirect()->route('panel.categories')->with('success', 'Categoria criada');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -45,7 +45,7 @@ class CategoryController
             
             $category->save();
 
-            return redirect()->route('panel.category')->with('success', 'Categoria atualizada');
+            return redirect()->route('panel.categories')->with('success', 'Categoria atualizada');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -60,7 +60,7 @@ class CategoryController
             $category = Category::findOrFail($categoryID);
             $category->delete();
 
-            return redirect()->route('panel.category')->with('success', 'Categoria excluída');
+            return redirect()->route('panel.categories')->with('success', 'Categoria excluída');
 
         } catch (Exception $e) {
             return back()->withErrors([

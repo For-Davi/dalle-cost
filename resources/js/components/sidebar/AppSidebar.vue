@@ -49,13 +49,13 @@
     },
     {
       title: 'Origens',
-      url: '/panel/origin',
+      url: '/panel/origins',
       icon: CreditCard,
       type: 'origin',
     },
     {
       title: 'Categorias',
-      url: '/panel/category',
+      url: '/panel/categories',
       icon: List,
       type: 'category',
     },
@@ -71,14 +71,6 @@
     return (
       currentRoute.value === url || currentRoute.value.startsWith(url + '/')
     )
-  }
-  const showOption = type => {
-    if (user.value.role === 'viewer') {
-      if (type !== 'dashboard') {
-        return false
-      }
-    }
-    return true
   }
   const handleLogout = () => {
     router.post(route('logout'))
@@ -100,11 +92,7 @@
       <SidebarGroup>
         <SidebarGroupContent>
           <SidebarMenu>
-            <SidebarMenuItem
-              v-for="item in items"
-              :key="item.title"
-              v-show="showOption(item.type)"
-            >
+            <SidebarMenuItem v-for="item in items" :key="item.title">
               <SidebarMenuButton asChild>
                 <Link
                   :href="item.url"

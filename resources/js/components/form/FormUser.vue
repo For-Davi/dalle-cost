@@ -45,7 +45,6 @@
     name: '',
     email: '',
     password: '',
-    role: '',
   })
 
   const isEditing = computed(() => !!props.user)
@@ -77,7 +76,6 @@
       if (props.user) {
         form.name = props.user.name
         form.email = props.user.email
-        form.role = props.user.role
         form.password = ''
       }
     }
@@ -131,24 +129,6 @@
             <p v-if="isEditing" class="text-xs text-gray-500">
               Deixe em branco para manter a senha atual
             </p>
-          </div>
-
-          <div class="flex flex-col space-y-1.5">
-            <Label>Nível de Acesso</Label>
-            <Select v-model="form.role">
-              <SelectTrigger class="w-full">
-                <SelectValue placeholder="Selecione um tipo de acesso" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="admin">Administrador</SelectItem>
-                  <SelectItem value="viewer">Visualizador</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-            <span v-if="form.errors.role" class="text-red-500 text-sm">
-              {{ form.errors.role }}
-            </span>
           </div>
         </div>
 

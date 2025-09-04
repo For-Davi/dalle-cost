@@ -24,7 +24,6 @@ class UpdateUserRequest extends FormRequest
                 'email',
                 Rule::unique('users')->ignore($userId)
             ],
-            'role' => 'required|in:viewer,admin',
             'user' => 'sometimes|exists:users,id'
         ];
     }
@@ -40,8 +39,6 @@ class UpdateUserRequest extends FormRequest
             'email.string' => 'O e-mail deve ser uma string.',
             'email.email' => 'O e-mail deve ser um endereço de e-mail válido.',
             'email.unique' => 'Este e-mail já está em uso por outro usuário.',
-            'role.required' => 'O tipo de acesso é obrigatório.',
-            'role.in' => 'O tipo de acesso selecionado não é válido.',
             'user.exists' => 'O usuário selecionado não existe.'
         ];
     }

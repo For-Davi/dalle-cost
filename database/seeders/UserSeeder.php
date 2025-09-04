@@ -14,7 +14,6 @@ class UserSeeder extends Seeder
             'name' => 'Carlos Davi',
             'email' => 'carlosdavi004@gmail.com',
             'password' => Hash::make('dalle154089'),
-            'role' => 'admin',
         ]);
     }
 }

@@ -17,7 +17,6 @@ class RegisterRequest extends FormRequest
             'name' => 'required|string|min:3|max:30',
             'password' => 'required|string|min:8',
             'email' => 'required|string|email|max:50|unique:users',
-            'role' => 'required|in:admin,viewer',
         ];
     }
 
@@ -36,8 +35,6 @@ class RegisterRequest extends FormRequest
             'email.email' => 'O e-mail deve ser um endereço de e-mail válido.',
             'email.max' => 'O e-mail deve ter no máximo 50 caracteres.',
             'email.unique' => 'Este e-mail já está cadastrado.',
-            'role.required' => 'O tipo de acesso (cargo) é obrigatório.',
-            'role.in' => 'O tipo de acesso selecionado não é válido.',
         ];
     }
 }

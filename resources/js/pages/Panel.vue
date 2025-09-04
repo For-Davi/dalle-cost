@@ -70,9 +70,9 @@
   const dataMovement = ref(null)
   const showMovementDetails = ref(false)
   const filters = ref({
-    memberID: null,
-    originID: null,
-    categoryID: null,
+    memberID: 0,
+    originID: 0,
+    categoryID: 0,
     year: null,
   })
   const chartData = ref({
@@ -121,6 +121,9 @@
     dataMovement.value = movement
     showMovementDetails.value = open
   }
+  const isNotCurrentYear = year => {
+    return year !== currentYear.value
+  }
 
   const page = usePage()
   const user = computed(() => page.props.auth.user)
@@ -143,15 +146,19 @@
 
     return props.movements
   })
+  const currentYear = computed(() => {
+    return String(
+      new Date(
+        new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+      ).getFullYear()
+    )
+  })
 </script>
 <template>
   <PanelLayout>
     <section class="px-6 mt-2">
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-      <div
-        v-if="user.role === 'admin'"
-        class="flex gap-x-2 bg-white p-4 rounded-lg shadow"
-      >
+      <div class="flex gap-x-2 bg-white p-4 rounded-lg shadow">
         <div class="flex flex-col space-y-1.5">
           <Label>Devedor</Label>
           <Select v-model="filters.memberID">
@@ -160,9 +167,10 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem :value="null">Todos</SelectItem>
+                <SelectItem :value="null">Sem devedor</SelectItem>
+                <SelectItem :value="0">Todos</SelectItem>
                 <SelectItem
-                  v-for="(item, index) in []"
+                  v-for="(item, index) in members ?? []"
                   :value="item.id"
                   :key="index"
                   >{{ item.name }}</SelectItem
@@ -179,9 +187,10 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem :value="null">Todos</SelectItem>
+                <SelectItem :value="null">Sem origem</SelectItem>
+                <SelectItem :value="0">Todos</SelectItem>
                 <SelectItem
-                  v-for="(item, index) in []"
+                  v-for="(item, index) in origins ?? []"
                   :value="item.id"
                   :key="index"
                   >{{ item.name }}</SelectItem
@@ -198,9 +207,10 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem :value="null">Todos</SelectItem>
+                <SelectItem :value="null">Sem categoria</SelectItem>
+                <SelectItem :value="0">Todos</SelectItem>
                 <SelectItem
-                  v-for="(item, index) in []"
+                  v-for="(item, index) in categories ?? []"
                   :value="item.id"
                   :key="index"
                   >{{ item.name }}</SelectItem
@@ -217,15 +227,14 @@
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem :value="null">{{
-                  new Date().getFullYear().toString()
-                }}</SelectItem>
+                <SelectItem :value="null">Ano atual</SelectItem>
                 <SelectItem
-                  v-for="(item, index) in []"
-                  :value="item.id"
+                  v-for="(item, index) in years ?? []"
+                  v-show="isNotCurrentYear(item)"
+                  :value="item"
                   :key="index"
-                  >{{ item.name }}</SelectItem
-                >
+                  >{{ item }}
+                </SelectItem>
               </SelectGroup>
             </SelectContent>
           </Select>
