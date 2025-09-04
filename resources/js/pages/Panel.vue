@@ -27,6 +27,14 @@
     TableHeader,
     TableRow,
   } from '@/components/ui/table'
+  import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+  } from '@/components/ui/pagination'
   import { ref, computed } from 'vue'
   import { usePage } from '@inertiajs/vue3'
   import MovementDetails from '@/components/general/MovementDetails.vue'
@@ -68,6 +76,8 @@
 
   const search = ref('')
   const dataMovement = ref(null)
+  const itensPerPage = ref(10)
+  const currentPage = ref(1)
   const showMovementDetails = ref(false)
   const filters = ref({
     memberID: 0,
@@ -124,6 +134,9 @@
   const isNotCurrentYear = year => {
     return year !== currentYear.value
   }
+  const setPage = page => {
+    currentPage.value = page
+  }
 
   const page = usePage()
   const user = computed(() => page.props.auth.user)
@@ -145,6 +158,11 @@
     }
 
     return props.movements
+  })
+  const paginatedMovements = computed(() => {
+    const start = (currentPage.value - 1) * itensPerPage.value
+    const end = start + itensPerPage.value
+    return getMovements.value.slice(start, end)
   })
   const currentYear = computed(() => {
     return String(
@@ -297,7 +315,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="(item, index) in getMovements" :key="index">
+            <TableRow v-for="(item, index) in paginatedMovements" :key="index">
               <TableCell class="pl-8">
                 {{ item.date_buy }}
               </TableCell>
@@ -327,6 +345,32 @@
             </TableRow>
           </TableBody>
         </Table>
+        <Pagination
+          class="my-2"
+          v-slot="{ page }"
+          :items-per-page="itensPerPage"
+          :total="getMovements.length"
+          :default-page="1"
+          @update:page="setPage"
+        >
+          <PaginationContent v-slot="{ items }">
+            <PaginationPrevious />
+
+            <template v-for="(item, index) in items" :key="index">
+              <PaginationItem
+                v-if="item.type === 'page'"
+                :value="item.value"
+                :is-active="item.value === page"
+              >
+                {{ item.value }}
+              </PaginationItem>
+            </template>
+
+            <PaginationEllipsis :index="4" />
+
+            <PaginationNext />
+          </PaginationContent>
+        </Pagination>
       </div>
     </section>
     <MovementDetails
