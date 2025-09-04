@@ -18,7 +18,44 @@
     SelectTrigger,
     SelectValue,
   } from '@/components/ui/select'
-  import { ref } from 'vue'
+  import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+  } from '@/components/ui/table'
+  import { ref, computed } from 'vue'
+  import { usePage } from '@inertiajs/vue3'
+  import MovementDetails from '@/components/general/MovementDetails.vue'
+  import { Eye } from 'lucide-vue-next'
+  import { Search } from 'lucide-vue-next'
+  import { Input } from '@/components/ui/input'
+
+  const props = defineProps({
+    movements: {
+      type: Array,
+      required: true,
+    },
+    members: {
+      type: Array,
+      required: true,
+    },
+    origins: {
+      type: Array,
+      required: true,
+    },
+    categories: {
+      type: Array,
+      required: true,
+    },
+    years: {
+      type: Array,
+      required: true,
+    },
+  })
 
   ChartJS.register(
     Title,
@@ -29,6 +66,9 @@
     LinearScale
   )
 
+  const search = ref('')
+  const dataMovement = ref(null)
+  const showMovementDetails = ref(false)
   const filters = ref({
     memberID: null,
     originID: null,
@@ -57,7 +97,6 @@
       },
     ],
   })
-
   const chartOptions = ref({
     responsive: true,
     plugins: {
@@ -70,12 +109,49 @@
       },
     },
   })
+
+  const formatCurrency = value => {
+    if (value === null || value === undefined) return 'R$ 0,00'
+    return Number(value).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    })
+  }
+  const showMovement = (open, movement) => {
+    dataMovement.value = movement
+    showMovementDetails.value = open
+  }
+
+  const page = usePage()
+  const user = computed(() => page.props.auth.user)
+  const getMovements = computed(() => {
+    if (search.value !== '') {
+      return props.movements.filter(item => {
+        const query = search.value.toLowerCase()
+
+        return (
+          item.date_buy?.toLowerCase().includes(query) ||
+          item.period?.toLowerCase().includes(query) ||
+          item.value?.toString().includes(query) ||
+          item.description?.toLowerCase().includes(query) ||
+          item.category?.name?.toLowerCase().includes(query) ||
+          item.member?.name?.toLowerCase().includes(query) ||
+          item.origin?.name?.toLowerCase().includes(query)
+        )
+      })
+    }
+
+    return props.movements
+  })
 </script>
 <template>
   <PanelLayout>
     <section class="px-6 mt-2">
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-      <div class="flex gap-x-2 bg-white p-4 rounded-lg shadow">
+      <div
+        v-if="user.role === 'admin'"
+        class="flex gap-x-2 bg-white p-4 rounded-lg shadow"
+      >
         <div class="flex flex-col space-y-1.5">
           <Label>Devedor</Label>
           <Select v-model="filters.memberID">
@@ -182,5 +258,72 @@
         />
       </div>
     </section>
+    <section class="my-2 px-6">
+      <div class="bg-white p-4 rounded-lg shadow">
+        <div class="relative w-full max-w-sm items-center">
+          <Input
+            id="search"
+            type="text"
+            v-model="search"
+            placeholder="Filtre os resultados"
+            class="pl-10"
+          />
+          <span
+            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
+          >
+            <Search class="size-4 text-muted-foreground" />
+          </span>
+        </div>
+        <Table class="border-2 mt-2 bg-white">
+          <TableCaption>Lista de movimentações</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="pl-8"> Data de compra </TableHead>
+              <TableHead class="pl-8"> Período </TableHead>
+              <TableHead class="pl-8"> Devedor </TableHead>
+              <TableHead class="pl-8"> Origem </TableHead>
+              <TableHead class="pl-8"> Categoria </TableHead>
+              <TableHead class="pl-8"> Valor </TableHead>
+              <TableHead class="pr-8 text-right">Ação</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="(item, index) in getMovements" :key="index">
+              <TableCell class="pl-8">
+                {{ item.date_buy }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ item.period }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ item.member ? item.member.name : 'Sem responsável' }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ item.origin ? item.origin.name : 'Sem origem' }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ item.category ? item.category.name : 'Sem categoria' }}
+              </TableCell>
+              <TableCell class="pl-8">
+                {{ formatCurrency(item.value) }}
+              </TableCell>
+              <TableCell class="text-center">
+                <Button
+                  class="cursor-pointer"
+                  @click="showMovement(true, item)"
+                >
+                  <Eye class="h-4 mr-2" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </div>
+    </section>
+    <MovementDetails
+      :movement="dataMovement"
+      v-model:open="showMovementDetails"
+      @close="showMovement(false, null)"
+    />
   </PanelLayout>
 </template>
