@@ -41,6 +41,8 @@
   import { Eye } from 'lucide-vue-next'
   import { Search } from 'lucide-vue-next'
   import { Input } from '@/components/ui/input'
+  import Button from '@/components/ui/button/Button.vue'
+  import Label from '@/components/ui/label/Label.vue'
 
   const props = defineProps({
     movements: {
@@ -141,11 +143,12 @@
   const page = usePage()
   const user = computed(() => page.props.auth.user)
   const getMovements = computed(() => {
-    if (search.value !== '') {
-      return props.movements.filter(item => {
-        const query = search.value.toLowerCase()
+    let list = props.movements
 
-        return (
+    if (search.value !== '') {
+      const query = search.value.toLowerCase()
+      list = list.filter(
+        item =>
           item.date_buy?.toLowerCase().includes(query) ||
           item.period?.toLowerCase().includes(query) ||
           item.value?.toString().includes(query) ||
@@ -153,16 +156,51 @@
           item.category?.name?.toLowerCase().includes(query) ||
           item.member?.name?.toLowerCase().includes(query) ||
           item.origin?.name?.toLowerCase().includes(query)
-        )
+      )
+    }
+
+    if (filters.value.memberID === null) {
+      list = list.filter(item => item.member_id === null)
+    } else if (filters.value.memberID > 0) {
+      list = list.filter(item => item.member_id === filters.value.memberID)
+    }
+
+    if (filters.value.categoryID === null) {
+      list = list.filter(item => item.category_id === null)
+    } else if (filters.value.categoryID > 0) {
+      list = list.filter(item => item.category_id === filters.value.categoryID)
+    }
+
+    if (filters.value.originID === null) {
+      list = list.filter(item => item.origin_id === null)
+    } else if (filters.value.originID > 0) {
+      list = list.filter(item => item.origin_id === filters.value.originID)
+    }
+
+    if (filters.value.year === null) {
+      const now = new Date()
+      const currentBrazilYear = new Date(
+        now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
+      ).getFullYear()
+
+      list = list.filter(item => {
+        const periodYear = parseInt(item.period?.split('/')[1])
+        return periodYear === currentBrazilYear
+      })
+    } else if (filters.value.year > 0) {
+      list = list.filter(item => {
+        const periodYear = parseInt(item.period?.split('/')[1])
+        return periodYear === filters.value.year
       })
     }
 
-    return props.movements
+    return list
   })
+
   const paginatedMovements = computed(() => {
     const start = (currentPage.value - 1) * itensPerPage.value
     const end = start + itensPerPage.value
-    return getMovements.value.slice(start, end)
+    return props.movements.slice(start, end)
   })
   const currentYear = computed(() => {
     return String(
@@ -170,6 +208,17 @@
         new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
       ).getFullYear()
     )
+  })
+  const currentPeriod = computed(() => {
+    const now = new Date()
+    const month = String(now.getMonth() + 1).padStart(2, '0')
+    const year = now.getFullYear()
+    return `${month}/${year}`
+  })
+  const currentMonthTotal = computed(() => {
+    return getMovements.value
+      .filter(item => item.period === currentPeriod.value)
+      .reduce((acc, item) => acc + Number(item.value || 0), 0)
   })
 </script>
 <template>
@@ -263,10 +312,12 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-4 rounded-lg shadow">
           <h3 class="text-lg font-semibold">Mês atual</h3>
-          <p class="text-3xl font-bold">R$ 1.248,00</p>
+          <p class="text-3xl font-bold">
+            {{ formatCurrency(currentMonthTotal) }}
+          </p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Total pago (mês atual)</h3>
+          <h3 class="text-lg font-semibold">Renda do mês</h3>
           <p class="text-3xl font-bold">R$ 1.100,00</p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
@@ -336,6 +387,7 @@
               </TableCell>
               <TableCell class="text-center">
                 <Button
+                  variant="ghost"
                   class="cursor-pointer"
                   @click="showMovement(true, item)"
                 >
@@ -349,7 +401,7 @@
           class="my-2"
           v-slot="{ page }"
           :items-per-page="itensPerPage"
-          :total="getMovements.length"
+          :total="movements.length"
           :default-page="1"
           @update:page="setPage"
         >

@@ -16,7 +16,11 @@ class DashboardController
         $members    = Member::all();
         $origins    = Origin::with('member')->get();
         $categories = Category::all();
-        $movements = Movement::all();
+        $movements = Movement::with(['member', 'origin', 'category'])
+            ->orderByRaw("SUBSTRING_INDEX(date_buy, '/', -1) DESC")
+            ->orderByRaw("LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(date_buy, '/', -2), '/', 1), 2, '0') DESC")
+            ->orderByRaw("LPAD(SUBSTRING_INDEX(date_buy, '/', 1), 2, '0') DESC")
+            ->get();
         $years = Movement::query()
             ->selectRaw("DISTINCT SUBSTRING(period, 4, 4) as year")
             ->orderBy('year')
