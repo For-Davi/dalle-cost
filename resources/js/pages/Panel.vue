@@ -193,9 +193,9 @@
       .filter(item => item.period === currentPeriod.value)
       .reduce((acc, item) => acc + Number(item.value || 0), 0)
   })
-  const currentFinance = computed(() => {
-    return Number(props.financeActual ?? 0)
-  })
+  const currentFinance = computed(() =>
+    Number(props.financeActual?.value ?? 0)
+  )
   const remainingAmount = computed(() => {
     return currentFinance.value - currentMonthTotal.value
   })
@@ -252,6 +252,7 @@
       },
     },
   })
+  console.log(props.financeActual)
 </script>
 <template>
   <PanelLayout>
@@ -259,6 +260,7 @@
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
       <div class="flex gap-x-2 bg-white p-4 rounded-lg shadow">
         <div class="flex flex-col space-y-1.5">
+        
           <Label>Devedor</Label>
           <Select v-model="filters.memberID">
             <SelectTrigger>
