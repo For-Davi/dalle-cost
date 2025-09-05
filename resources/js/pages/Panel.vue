@@ -194,7 +194,7 @@
       .reduce((acc, item) => acc + Number(item.value || 0), 0)
   })
   const currentFinance = computed(() => {
-    return Number(props.financeActual.value ?? 0)
+    return Number(props.financeActual ?? 0)
   })
   const remainingAmount = computed(() => {
     return currentFinance.value - currentMonthTotal.value
