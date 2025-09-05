@@ -68,7 +68,7 @@
     },
     financeActual: {
       type: Object,
-      required: true,
+      required: false,
     },
   })
 
