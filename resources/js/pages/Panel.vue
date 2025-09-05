@@ -252,7 +252,6 @@
       },
     },
   })
-  console.log(props.financeActual)
 </script>
 <template>
   <PanelLayout>
