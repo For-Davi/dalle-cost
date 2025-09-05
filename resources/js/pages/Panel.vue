@@ -190,9 +190,12 @@
   })
   const currentMonthTotal = computed(() => {
     return props.movements
-      .filter(item => item.period === currentPeriod.value)
-      .reduce((acc, item) => acc + Number(item.value || 0), 0)
-  })
+      .filter(item => 
+        item.period === currentPeriod.value && 
+        item.member?.id === user.value.id
+      )
+      .reduce((acc, item) => acc + Number(item.value || 0), 0);
+  });
   const currentFinance = computed(() => Number(props.financeActual?.value ?? 0))
   const remainingAmount = computed(() => {
     return currentFinance.value - currentMonthTotal.value
