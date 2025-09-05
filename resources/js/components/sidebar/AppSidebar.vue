@@ -7,6 +7,7 @@
     CreditCard,
     ShieldUser,
     List,
+    CircleDollarSign,
   } from 'lucide-vue-next'
   import {
     Sidebar,
@@ -40,6 +41,12 @@
       url: '/panel/data',
       icon: Database,
       type: 'data',
+    },
+    {
+      title: 'Finanças',
+      url: '/panel/finances',
+      icon: CircleDollarSign,
+      type: 'finances',
     },
     {
       title: 'Integrantes',

@@ -1,7 +1,6 @@
 <script setup>
   import PanelLayout from '@/layout/PanelLayout.vue'
   import Button from '@/components/ui/button/Button.vue'
-  import FormUser from '@/components/form/FormUser.vue'
   import { Ellipsis, Pencil, Trash } from 'lucide-vue-next'
   import { router } from '@inertiajs/vue3'
   import { Plus } from 'lucide-vue-next'
@@ -25,70 +24,79 @@
   } from '@/components/ui/dropdown-menu'
   import { ref } from 'vue'
   import { toast } from 'vue-sonner'
+  import FormFinance from '@/components/form/FormFinance.vue'
 
   defineOptions({
-    name: 'Users',
+    name: 'Finance',
   })
 
   const props = defineProps({
-    users: {
+    finances: {
       type: Array,
       required: true,
     },
   })
 
   const dataEdit = ref(null)
-  const isFormUserOpen = ref(false)
+  const isFormFinanceOpen = ref(false)
 
-  const setDataEdit = (user, open) => {
-    dataEdit.value = user
-    isFormUserOpen.value = open
+  const setDataEdit = (finance, open) => {
+    dataEdit.value = finance
+    isFormFinanceOpen.value = open
   }
-
   const exclude = id => {
-    if (confirm('Tem certeza que deseja excluir este usuário?')) {
-      router.delete(route('user.destroy', { userID: id }))
-      toast.success('Usuário excluído')
+    if (confirm('Tem certeza que deseja excluir esta renda?')) {
+      router.delete(route('finance.destroy', { financeID: id }))
+      toast.success('Finança excluída')
     }
+  }
+  const formatCurrency = value => {
+    if (value === null || value === undefined) return 'R$ 0,00'
+    return Number(value).toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    })
   }
   const openCreateForm = () => {
     dataEdit.value = null
-    isFormUserOpen.value = true
+    isFormFinanceOpen.value = true
   }
 </script>
 
 <template>
   <PanelLayout>
     <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Usuários</h1>
+      <h1 class="text-2xl font-bold mb-6">Finanças</h1>
       <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
-        <FormUser
-          :user="dataEdit"
-          v-model:open="isFormUserOpen"
+        <FormFinance
+          :finance="dataEdit"
+          v-model:open="isFormFinanceOpen"
           @close="setDataEdit(null, false)"
         />
         <Button class="cursor-pointer" @click="openCreateForm">
-          <span>Novo usuário</span>
+          <span>Nova finança</span>
           <Plus class="w-4 h-4 mr-2" />
         </Button>
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de usuários</TableCaption>
+          <TableCaption>Lista de finanças</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="w-[100px]"> Nome </TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Ação</TableHead>
+              <TableHead class="w-[40%] pl-8"> Período </TableHead>
+              <TableHead class="w-[40%] pl-8"> Valor </TableHead>
+              <TableHead class="w-[20%] pr-8 text-right">Ação</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="(item, index) in users" :key="index">
-              <TableCell>
-                {{ item.name }}
+            <TableRow v-for="(item, index) in finances ?? []" :key="index">
+              <TableCell class="pl-8">
+                {{ item.period }}
               </TableCell>
-              <TableCell>{{ item.email }}</TableCell>
-              <TableCell>
+              <TableCell class="pl-8">
+                {{ formatCurrency(item.value) }}
+              </TableCell>
+              <TableCell class="pr-8 text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
                     <Button variant="ghost" class="cursor-pointer">

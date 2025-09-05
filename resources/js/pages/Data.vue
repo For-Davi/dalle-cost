@@ -12,6 +12,7 @@
     TableHead,
     TableHeader,
     TableRow,
+    TableFooter,
   } from '@/components/ui/table'
   import {
     DropdownMenu,
@@ -22,6 +23,14 @@
     DropdownMenuSeparator,
     DropdownMenuTrigger,
   } from '@/components/ui/dropdown-menu'
+  import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationNext,
+    PaginationPrevious,
+  } from '@/components/ui/pagination'
   import { computed, ref } from 'vue'
   import { toast } from 'vue-sonner'
   import FormMovement from '@/components/form/FormMovement.vue'
@@ -52,11 +61,13 @@
     },
   })
 
+  const itensPerPage = ref(10)
   const search = ref('')
   const dataEdit = ref(null)
   const isFormMovementOpen = ref(false)
   const dataMovement = ref(null)
   const showMovementDetails = ref(false)
+  const currentPage = ref(1)
 
   const setDataEdit = (movement, open) => {
     dataEdit.value = movement
@@ -82,6 +93,9 @@
       style: 'currency',
       currency: 'BRL',
     })
+  }
+  const setPage = page => {
+    currentPage.value = page
   }
 
   const getMovements = computed(() => {
@@ -203,6 +217,33 @@
               </TableCell>
             </TableRow>
           </TableBody>
+          <TableFooter class="bg-white">
+            <Pagination
+              class="my-2"
+              :items-per-page="itensPerPage"
+              :total="getMovements.length"
+              :default-page="1"
+              @update:page="setPage"
+            >
+              <PaginationContent v-slot="{ items }">
+                <PaginationPrevious />
+
+                <template v-for="(item, index) in items" :key="index">
+                  <PaginationItem
+                    v-if="item.type === 'page'"
+                    :value="item.value"
+                    :is-active="item.value === page"
+                  >
+                    {{ item.value }}
+                  </PaginationItem>
+                </template>
+
+                <PaginationEllipsis :index="4" />
+
+                <PaginationNext />
+              </PaginationContent>
+            </Pagination>
+          </TableFooter>
         </Table>
       </section>
       <MovementDetails

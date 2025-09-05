@@ -43,6 +43,7 @@
   import { Input } from '@/components/ui/input'
   import Button from '@/components/ui/button/Button.vue'
   import Label from '@/components/ui/label/Label.vue'
+  import TableFooter from '@/components/ui/table/TableFooter.vue'
 
   const props = defineProps({
     movements: {
@@ -63,6 +64,10 @@
     },
     years: {
       type: Array,
+      required: true,
+    },
+    financeActual: {
+      type: Object,
       required: true,
     },
   })
@@ -184,9 +189,15 @@
     return `${month}/${year}`
   })
   const currentMonthTotal = computed(() => {
-    return getMovements.value
+    return props.movements
       .filter(item => item.period === currentPeriod.value)
       .reduce((acc, item) => acc + Number(item.value || 0), 0)
+  })
+  const currentFinance = computed(() => {
+    return Number(props.financeActual.value ?? 0)
+  })
+  const remainingAmount = computed(() => {
+    return currentFinance.value - currentMonthTotal.value
   })
   const monthlyTotals = computed(() => {
     const totals = Array(12).fill(0)
@@ -339,11 +350,19 @@
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
           <h3 class="text-lg font-semibold">Renda do mês</h3>
-          <p class="text-3xl font-bold">R$ 1.100,00</p>
+          <p class="text-3xl font-bold">{{ formatCurrency(currentFinance) }}</p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Resultado</h3>
-          <p class="text-3xl font-bold text-red-300">R$ - 148,00</p>
+          <h3 class="text-lg font-semibold">Saldo</h3>
+          <p
+            class="text-3xl font-bold"
+            :class="{
+              'text-green-500': remainingAmount >= 0,
+              'text-red-500': remainingAmount < 0,
+            }"
+          >
+            {{ formatCurrency(remainingAmount) }}
+          </p>
         </div>
       </div>
     </section>
@@ -417,33 +436,35 @@
               </TableCell>
             </TableRow>
           </TableBody>
+          <TableFooter class="bg-white">
+            <Pagination
+              class="my-2"
+              v-slot="{ page }"
+              :items-per-page="itensPerPage"
+              :total="getMovements.length"
+              :default-page="1"
+              @update:page="setPage"
+            >
+              <PaginationContent v-slot="{ items }">
+                <PaginationPrevious />
+
+                <template v-for="(item, index) in items" :key="index">
+                  <PaginationItem
+                    v-if="item.type === 'page'"
+                    :value="item.value"
+                    :is-active="item.value === page"
+                  >
+                    {{ item.value }}
+                  </PaginationItem>
+                </template>
+
+                <PaginationEllipsis :index="4" />
+
+                <PaginationNext />
+              </PaginationContent>
+            </Pagination>
+          </TableFooter>
         </Table>
-        <Pagination
-          class="my-2"
-          v-slot="{ page }"
-          :items-per-page="itensPerPage"
-          :total="getMovements.length"
-          :default-page="1"
-          @update:page="setPage"
-        >
-          <PaginationContent v-slot="{ items }">
-            <PaginationPrevious />
-
-            <template v-for="(item, index) in items" :key="index">
-              <PaginationItem
-                v-if="item.type === 'page'"
-                :value="item.value"
-                :is-active="item.value === page"
-              >
-                {{ item.value }}
-              </PaginationItem>
-            </template>
-
-            <PaginationEllipsis :index="4" />
-
-            <PaginationNext />
-          </PaginationContent>
-        </Pagination>
       </div>
     </section>
     <MovementDetails

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Finance;
 use App\Models\Member;
 use App\Models\Origin;
 use App\Models\Movement;
 use Inertia\Inertia;
+use Carbon\Carbon;
 
 class DashboardController
 {
@@ -26,6 +28,9 @@ class DashboardController
             ->orderBy('year')
             ->pluck('year')
             ->toArray();
+        $now = Carbon::now('America/Sao_Paulo');
+        $currentPeriod = $now->format('m/Y');
+        $financeActual = Finance::where('period', $currentPeriod)->first();
 
         return Inertia::render('Panel', [
             'origins'    => $origins,
@@ -33,6 +38,7 @@ class DashboardController
             'categories' => $categories,
             'years'      => $years,
             'movements'  => $movements,
+            'financeActual' => $financeActual
         ]);
     }
 
