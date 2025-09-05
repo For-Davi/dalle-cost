@@ -8,6 +8,7 @@
     ShieldUser,
     List,
     CircleDollarSign,
+    PiggyBank
   } from 'lucide-vue-next'
   import {
     Sidebar,
@@ -41,6 +42,12 @@
       url: '/panel/data',
       icon: Database,
       type: 'data',
+    },
+    {
+      title: 'Recebimentos',
+      url: '/panel/receipts',
+      icon: PiggyBank,
+      type: 'receipts',
     },
     {
       title: 'Finanças',
