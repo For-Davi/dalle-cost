@@ -87,40 +87,6 @@
     categoryID: 0,
     year: null,
   })
-  const chartData = ref({
-    labels: [
-      'Janeiro',
-      'Fevereiro',
-      'Março',
-      'Abril',
-      'Maio',
-      'Junho',
-      'Julho',
-      'Setembro',
-      'Outubro',
-      'Novembro',
-      'Dezembro',
-    ],
-    datasets: [
-      {
-        label: 'Dívidas',
-        data: [40, 55, 32, 80, 60],
-        backgroundColor: '#3b82f6',
-      },
-    ],
-  })
-  const chartOptions = ref({
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Relatório de divídas',
-      },
-    },
-  })
 
   const formatCurrency = value => {
     if (value === null || value === undefined) return 'R$ 0,00'
@@ -187,10 +153,12 @@
         const periodYear = parseInt(item.period?.split('/')[1])
         return periodYear === currentBrazilYear
       })
-    } else if (filters.value.year > 0) {
+    } else {
+      const selectedYear = parseInt(filters.value.year)
+
       list = list.filter(item => {
         const periodYear = parseInt(item.period?.split('/')[1])
-        return periodYear === filters.value.year
+        return periodYear === selectedYear
       })
     }
 
@@ -200,7 +168,7 @@
   const paginatedMovements = computed(() => {
     const start = (currentPage.value - 1) * itensPerPage.value
     const end = start + itensPerPage.value
-    return props.movements.slice(start, end)
+    return getMovements.value.slice(start, end)
   })
   const currentYear = computed(() => {
     return String(
@@ -219,6 +187,59 @@
     return getMovements.value
       .filter(item => item.period === currentPeriod.value)
       .reduce((acc, item) => acc + Number(item.value || 0), 0)
+  })
+  const monthlyTotals = computed(() => {
+    const totals = Array(12).fill(0)
+    const filteredMovements = getMovements.value
+
+    filteredMovements.forEach(movement => {
+      const [month] = movement.period.split('/')
+      const monthIndex = parseInt(month, 10) - 1
+
+      totals[monthIndex] += parseFloat(movement.value)
+    })
+
+    return totals
+  })
+
+  const chartData = computed(() => {
+    return {
+      labels: [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro',
+      ],
+      datasets: [
+        {
+          label: 'Dívidas',
+          data: monthlyTotals.value,
+          backgroundColor: '#3b82f6',
+          borderRadius: 5,
+          barPercentage: 0.7,
+        },
+      ],
+    }
+  })
+  const chartOptions = ref({
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Relatório de dívidas',
+      },
+    },
   })
 </script>
 <template>
@@ -401,7 +422,7 @@
           class="my-2"
           v-slot="{ page }"
           :items-per-page="itensPerPage"
-          :total="movements.length"
+          :total="getMovements.length"
           :default-page="1"
           @update:page="setPage"
         >

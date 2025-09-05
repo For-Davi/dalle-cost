@@ -29,32 +29,32 @@ Route::middleware(['auth'])->group(function () {
     */
     Route::prefix('user')->name('user.')->group(function () {
         Route::post('/', [UserController::class, 'store'])->name('store');
-        Route::put('/{user}', [UserController::class, 'update'])->name('update');
-        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+        Route::put('/{userID}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{userID}', [UserController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('member')->name('member.')->group(function () {
         Route::post('/', [MemberController::class, 'store'])->name('store');
-        Route::put('/{member}', [MemberController::class, 'update'])->name('update');
-        Route::delete('/{member}', [MemberController::class, 'destroy'])->name('destroy');
+        Route::put('/{memberID}', [MemberController::class, 'update'])->name('update');
+        Route::delete('/{memberID}', [MemberController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('category')->name('category.')->group(function () {
         Route::post('/', [CategoryController::class, 'store'])->name('store');
-        Route::put('/{category}', [CategoryController::class, 'update'])->name('update');
-        Route::delete('/{category}', [CategoryController::class, 'destroy'])->name('destroy');
+        Route::put('/{categoryID}', [CategoryController::class, 'update'])->name('update');
+        Route::delete('/{categoryID}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('origin')->name('origin.')->group(function () {
         Route::post('/', [OriginController::class, 'store'])->name('store');
-        Route::put('/{origin}', [OriginController::class, 'update'])->name('update');
-        Route::delete('/{origin}', [OriginController::class, 'destroy'])->name('destroy');
+        Route::put('/{originID}', [OriginController::class, 'update'])->name('update');
+        Route::delete('/{originID}', [OriginController::class, 'destroy'])->name('destroy');
     });
 
     Route::prefix('data')->name('data.')->group(function () {
         Route::post('/', [DataController::class, 'store'])->name('store');
-        Route::put('/{data}', [DataController::class, 'update'])->name('update');
-        Route::delete('/{data}', [DataController::class, 'destroy'])->name('destroy');
+        Route::put('/{dataID}', [DataController::class, 'update'])->name('update');
+        Route::delete('/{dataID}', [DataController::class, 'destroy'])->name('destroy');
     });
 
     /*
