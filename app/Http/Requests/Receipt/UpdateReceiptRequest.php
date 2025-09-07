@@ -25,7 +25,6 @@ class UpdateReceiptRequest extends FormRequest
                 'regex:/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/', // dd/mm/yyyy
             ],
             'memberID' => 'nullable|exists:members,id',
-            'description' => 'nullable|string',
         ];
     }
 
@@ -41,7 +40,6 @@ class UpdateReceiptRequest extends FormRequest
             'memberID.exists'   => 'O membro selecionado não existe.',
             'dateReceipt.required' => 'A data de recebimento é obrigatória',
             'dateReceipt.regex'    => 'A data de recebimento deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
-            'description.string' => 'A descrição deve ser um texto válido.',
         ];
     }
 

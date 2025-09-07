@@ -1,9 +1,8 @@
 <script setup>
   import PanelLayout from '@/layout/PanelLayout.vue'
   import Button from '@/components/ui/button/Button.vue'
-  import { Ellipsis, Pencil, Trash } from 'lucide-vue-next'
+  import { Ellipsis, Pencil, Trash, Plus } from 'lucide-vue-next'
   import { router } from '@inertiajs/vue3'
-  import { Plus, Eye } from 'lucide-vue-next'
   import {
     Table,
     TableBody,
@@ -33,8 +32,7 @@
   } from '@/components/ui/pagination'
   import { computed, ref } from 'vue'
   import { toast } from 'vue-sonner'
-  import FormMovement from '@/components/form/FormMovement.vue'
-  import MovementDetails from '@/components/general/MovementDetails.vue'
+  import FormReceipt from '@/components/form/FormReceipt.vue'
   import { Search } from 'lucide-vue-next'
   import { Input } from '@/components/ui/input'
 
@@ -43,19 +41,11 @@
   })
 
   const props = defineProps({
-    movements: {
+    receipts: {
       type: Array,
       required: true,
     },
     members: {
-      type: Array,
-      required: true,
-    },
-    origins: {
-      type: Array,
-      required: true,
-    },
-    categories: {
       type: Array,
       required: true,
     },
@@ -64,28 +54,23 @@
   const itensPerPage = ref(10)
   const search = ref('')
   const dataEdit = ref(null)
-  const isFormMovementOpen = ref(false)
-  const dataMovement = ref(null)
-  const showMovementDetails = ref(false)
+  const isFormReceiptOpen = ref(false)
+  const dataReceipt = ref(null)
   const currentPage = ref(1)
 
-  const setDataEdit = (movement, open) => {
-    dataEdit.value = movement
-    isFormMovementOpen.value = open
+  const setDataEdit = (receipt, open) => {
+    dataEdit.value = receipt
+    isFormReceiptOpen.value = open
   }
   const exclude = id => {
-    if (confirm('Tem certeza que deseja excluir esta movimentação?')) {
+    if (confirm('Tem certeza que deseja excluir este recebimento?')) {
       router.delete(route('data.destroy', { dataID: id }))
-      toast.success('Movimentação excluída')
+      toast.success('Recebimento excluído')
     }
-  }
-  const showMovement = (open, movement) => {
-    dataMovement.value = movement
-    showMovementDetails.value = open
   }
   const openCreateForm = () => {
     dataEdit.value = null
-    isFormMovementOpen.value = true
+    isFormReceiptOpen.value = true
   }
   const formatCurrency = value => {
     if (value === null || value === undefined) return 'R$ 0,00'
@@ -98,38 +83,34 @@
     currentPage.value = page
   }
 
-  const getMovements = computed(() => {
+  const getReceipts = computed(() => {
     if (search.value !== '') {
-      return props.movements.filter(item => {
+      return props.receipts.filter(item => {
         const query = search.value.toLowerCase()
 
         return (
-          item.date_buy?.toLowerCase().includes(query) ||
           item.period?.toLowerCase().includes(query) ||
+          item.date_receipt?.toLowerCase().includes(query) ||
           item.value?.toString().includes(query) ||
           item.description?.toLowerCase().includes(query) ||
-          item.category?.name?.toLowerCase().includes(query) ||
-          item.member?.name?.toLowerCase().includes(query) ||
-          item.origin?.name?.toLowerCase().includes(query)
+          item.member?.name?.toLowerCase().includes(query)
         )
       })
     }
 
-    return props.movements
+    return props.receipts
   })
 </script>
 
 <template>
   <PanelLayout>
     <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Dados</h1>
+      <h1 class="text-2xl font-bold mb-6">Recebimentos</h1>
       <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
-        <FormMovement
-          :open="isFormMovementOpen"
-          :movement="dataEdit"
+        <FormReceipt
+          :open="isFormReceiptOpen"
+          :receipt="dataEdit"
           :members="members"
-          :origins="origins"
-          :categories="categories"
           @close="setDataEdit(null, false)"
         />
         <div class="relative w-full max-w-sm items-center">
@@ -147,20 +128,18 @@
           </span>
         </div>
         <Button class="cursor-pointer" @click="openCreateForm">
-          <span>Novo lançamento</span>
+          <span>Novo recebimento</span>
           <Plus class="w-4 h-4 mr-2" />
         </Button>
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de movimentações</TableCaption>
+          <TableCaption>Lista de recebimentos</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="pl-8"> Data de compra </TableHead>
+              <TableHead class="pl-8"> Data de recebimento </TableHead>
               <TableHead class="pl-8"> Período </TableHead>
               <TableHead class="pl-8"> Devedor </TableHead>
-              <TableHead class="pl-8"> Origem </TableHead>
-              <TableHead class="pl-8"> Categoria </TableHead>
               <TableHead class="pl-8"> Valor </TableHead>
               <TableHead class="pr-8 text-right">Ação</TableHead>
             </TableRow>
@@ -168,19 +147,13 @@
           <TableBody>
             <TableRow v-for="(item, index) in getMovements" :key="index">
               <TableCell class="pl-8">
-                {{ item.date_buy }}
+                {{ item.date_receipt }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ item.period }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
-              </TableCell>
-              <TableCell class="pl-8">
-                {{ item.origin ? item.origin.name : 'Sem origem' }}
-              </TableCell>
-              <TableCell class="pl-8">
-                {{ item.category ? item.category.name : 'Sem categoria' }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ formatCurrency(item.value) }}
@@ -196,10 +169,6 @@
                     <DropdownMenuLabel>Opções</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="showMovement(true, item)">
-                        <Eye class="w-4 h-4 mr-2" />
-                        <span>Detalhes</span>
-                      </DropdownMenuItem>
                       <DropdownMenuItem @click="setDataEdit(item, true)">
                         <Pencil class="w-4 h-4 mr-2" />
                         <span>Editar</span>
@@ -221,13 +190,12 @@
             <Pagination
               class="my-2"
               :items-per-page="itensPerPage"
-              :total="getMovements.length"
+              :total="getReceipts.length"
               :default-page="1"
               @update:page="setPage"
             >
               <PaginationContent v-slot="{ items }">
                 <PaginationPrevious />
-
                 <template v-for="(item, index) in items" :key="index">
                   <PaginationItem
                     v-if="item.type === 'page'"
@@ -237,20 +205,13 @@
                     {{ item.value }}
                   </PaginationItem>
                 </template>
-
                 <PaginationEllipsis :index="4" />
-
                 <PaginationNext />
               </PaginationContent>
             </Pagination>
           </TableFooter>
         </Table>
       </section>
-      <MovementDetails
-        :movement="dataMovement"
-        v-model:open="showMovementDetails"
-        @close="showMovement(false, null)"
-      />
     </div>
   </PanelLayout>
 </template>

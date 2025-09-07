@@ -117,6 +117,11 @@
 
     return props.movements
   })
+   const paginatedMovements = computed(() => {
+    const start = (currentPage.value - 1) * itensPerPage.value
+    const end = start + itensPerPage.value
+    return getMovements.value.slice(start, end)
+  })
 </script>
 
 <template>
@@ -166,7 +171,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="(item, index) in getMovements" :key="index">
+            <TableRow v-for="(item, index) in paginatedMovements" :key="index">
               <TableCell class="pl-8">
                 {{ item.date_buy }}
               </TableCell>

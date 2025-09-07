@@ -15,7 +15,6 @@ return new class extends Migration
             $table->string('date_receipt'); //   MM/YY
             $table->unsignedBigInteger('member_id')->nullable();
             $table->foreign('member_id')->references('id')->on('members');
-            $table->longText('description')->nullable();
             $table->timestamps();
         });
     }

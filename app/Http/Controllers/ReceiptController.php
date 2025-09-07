@@ -27,9 +27,8 @@ class ReceiptController
                 Receipt::create([
                     'value'       => $request->value,
                     'member_id'   => $request->memberID,
-                    'description' => $request->description,
                     'period'      => $request->period,
-                    'date_receipt'      => $request->dateReceipt,
+                    'date_receipt'=> $request->dateReceipt,
                 ]);
 
 
@@ -51,7 +50,6 @@ class ReceiptController
 ;           $receipt->period = $request->period;
 ;           $receipt->date_receipt = $request->dateReceipt;
 ;           $receipt->member_id = $request->memberID;
-;           $receipt->description = $request->description;
             
             $receipt->save();
 

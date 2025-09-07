@@ -18,7 +18,6 @@ class Receipt extends Authenticatable
         'period',
         'member_id',
         'date_receipt',
-        'description'
     ];
 
     public function member()
