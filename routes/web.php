@@ -9,7 +9,6 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OriginController;
 use App\Http\Controllers\DataController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\ReceiptController;
 
 // 🖥️ Auth Views
@@ -47,12 +46,6 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{categoryID}', [CategoryController::class, 'destroy'])->name('destroy');
     });
 
-    Route::prefix('finance')->name('finance.')->group(function () {
-        Route::post('/', [FinanceController::class, 'store'])->name('store');
-        Route::put('/{financeID}', [FinanceController::class, 'update'])->name('update');
-        Route::delete('/{financeID}', [FinanceController::class, 'destroy'])->name('destroy');
-    });
-
     Route::prefix('receipt')->name('receipt.')->group(function () {
         Route::post('/', [ReceiptController::class, 'store'])->name('store');
         Route::put('/{receiptID}', [ReceiptController::class, 'update'])->name('update');
@@ -82,7 +75,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/members', [MemberController::class, 'index'])->name('members');
         Route::get('/categories', [CategoryController::class, 'index'])->name('categories');
         Route::get('/origins', [OriginController::class, 'index'])->name('origins');
-        Route::get('/finances', [FinanceController::class, 'index'])->name('finances');
         Route::get('/receipts', [ReceiptController::class, 'index'])->name('receipts');
         Route::get('/data', [DataController::class, 'index'])->name('data');
     });

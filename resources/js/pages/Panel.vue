@@ -66,8 +66,8 @@
       type: Array,
       required: true,
     },
-    financeActual: {
-      type: Object,
+    receipts: {
+      type: Array,
       required: false,
     },
   })

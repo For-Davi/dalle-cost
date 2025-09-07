@@ -50,12 +50,6 @@
       type: 'receipts',
     },
     {
-      title: 'Finanças',
-      url: '/panel/finances',
-      icon: CircleDollarSign,
-      type: 'finances',
-    },
-    {
       title: 'Integrantes',
       url: '/panel/members',
       icon: Users,
