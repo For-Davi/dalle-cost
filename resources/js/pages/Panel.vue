@@ -68,7 +68,7 @@
     },
     receipts: {
       type: Array,
-      required: false,
+      required: true,
     },
   })
 
@@ -183,7 +183,6 @@
 
     return list
   })
-
   const paginatedMovements = computed(() => {
     const start = (currentPage.value - 1) * itensPerPage.value
     const end = start + itensPerPage.value
@@ -208,9 +207,50 @@
       0
     )
   })
-  const currentFinance = computed(() => Number(props.financeActual?.value ?? 0))
+  const currentReceipt = computed(() => {
+    let filteredReceipts = [...props.receipts]
+
+    if (filters.value.memberID !== 0) {
+      const memberId = Number(filters.value.memberID)
+      filteredReceipts = filteredReceipts.filter(
+        receipt => Number(receipt.member_id) === memberId
+      )
+    }
+
+    if (filters.value.month !== null) {
+      const selectedMonth = parseInt(filters.value.month)
+
+      filteredReceipts = filteredReceipts.filter(receipt => {
+        if (!receipt.period) return false
+
+        const [monthStr, yearStr] = receipt.period.split('/')
+        const periodMonth = parseInt(monthStr)
+
+        return periodMonth === selectedMonth
+      })
+    }
+
+    if (filters.value.year !== null) {
+      const selectedYear = parseInt(filters.value.year)
+
+      filteredReceipts = filteredReceipts.filter(receipt => {
+        if (!receipt.period) return false
+
+        const [monthStr, yearStr] = receipt.period.split('/')
+        const periodYear = parseInt(yearStr)
+
+        return periodYear === selectedYear
+      })
+    }
+
+    const totalValue = filteredReceipts.reduce((sum, receipt) => {
+      return sum + parseFloat(receipt.value)
+    }, 0)
+
+    return totalValue.toFixed(2)
+  })
   const remainingAmount = computed(() => {
-    return currentFinance.value - currentMonthTotal.value
+    return currentReceipt.value - currentMonthTotal.value
   })
   const monthlyTotals = computed(() => {
     const totals = Array(12).fill(0)
@@ -390,14 +430,14 @@
     <section class="p-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Mês atual (Saída)</h3>
+          <h3 class="text-lg font-semibold">Divídas (Saída)</h3>
           <p class="text-3xl font-bold">
             {{ formatCurrency(currentMonthTotal) }}
           </p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Recebimento do mês (Entrada)</h3>
-          <p class="text-3xl font-bold">{{ formatCurrency(currentFinance) }}</p>
+          <h3 class="text-lg font-semibold">Recebimentos (Entrada)</h3>
+          <p class="text-3xl font-bold">{{ formatCurrency(currentReceipt) }}</p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
           <h3 class="text-lg font-semibold">Saldo</h3>
