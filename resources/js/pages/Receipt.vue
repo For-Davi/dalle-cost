@@ -64,7 +64,7 @@
   }
   const exclude = id => {
     if (confirm('Tem certeza que deseja excluir este recebimento?')) {
-      router.delete(route('data.destroy', { dataID: id }))
+      router.delete(route('receipt.destroy', { receiptID: id }))
       toast.success('Recebimento excluído')
     }
   }
@@ -134,7 +134,9 @@
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de recebimentos</TableCaption>
+          <TableCaption
+            >Lista de recebimentos : {{ getReceipts.length }}</TableCaption
+          >
           <TableHeader>
             <TableRow>
               <TableHead class="pl-8"> Data de recebimento </TableHead>
@@ -145,7 +147,7 @@
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow v-for="(item, index) in getMovements" :key="index">
+            <TableRow v-for="(item, index) in getReceipts" :key="index">
               <TableCell class="pl-8">
                 {{ item.date_receipt }}
               </TableCell>

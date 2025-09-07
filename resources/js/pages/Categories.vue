@@ -76,7 +76,9 @@
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de categorias</TableCaption>
+          <TableCaption
+            >Lista de categorias : {{ categories.length }}</TableCaption
+          >
           <TableHeader>
             <TableRow>
               <TableHead class="w-[80%] pl-8"> Nome </TableHead>

@@ -117,7 +117,7 @@
 
     return props.movements
   })
-   const paginatedMovements = computed(() => {
+  const paginatedMovements = computed(() => {
     const start = (currentPage.value - 1) * itensPerPage.value
     const end = start + itensPerPage.value
     return getMovements.value.slice(start, end)
@@ -158,7 +158,9 @@
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de movimentações</TableCaption>
+          <TableCaption
+            >Lista de movimentações : {{ getMovements.length }}</TableCaption
+          >
           <TableHeader>
             <TableRow>
               <TableHead class="pl-8"> Data de compra </TableHead>
@@ -232,7 +234,6 @@
             >
               <PaginationContent v-slot="{ items }">
                 <PaginationPrevious />
-
                 <template v-for="(item, index) in items" :key="index">
                   <PaginationItem
                     v-if="item.type === 'page'"
@@ -242,9 +243,7 @@
                     {{ item.value }}
                   </PaginationItem>
                 </template>
-
                 <PaginationEllipsis :index="4" />
-
                 <PaginationNext />
               </PaginationContent>
             </Pagination>

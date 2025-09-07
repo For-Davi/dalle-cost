@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Receipt\CreateReceiptRequest;
 use App\Http\Requests\Receipt\UpdateReceiptRequest;
+use App\Models\Member;
 use App\Models\Receipt;
 use Exception;
 use Inertia\Inertia;
@@ -16,9 +17,11 @@ class ReceiptController
         $receipts = Receipt::with(['member'])
         ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
         ->get();
+        $members = Member::all();
         
         return Inertia::render('Receipt', [
             'receipts' => $receipts,
+            'members' => $members
         ]);
     }
     public function store(CreateReceiptRequest $request)
@@ -32,7 +35,7 @@ class ReceiptController
                 ]);
 
 
-            return redirect()->route('panel.receipt')->with('success', 'Recebimento criado');
+            return redirect()->route('panel.receipts')->with('success', 'Recebimento criado');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -53,7 +56,7 @@ class ReceiptController
             
             $receipt->save();
 
-            return redirect()->route('panel.receipt')->with('success', 'Recimento atualizado');
+            return redirect()->route('panel.receipts')->with('success', 'Recimento atualizado');
 
         } catch (Exception $e) {
             return back()->withErrors([
@@ -68,7 +71,7 @@ class ReceiptController
             $receipt = Receipt::findOrFail($receiptID);
             $receipt->delete();
 
-            return redirect()->route('panel.receipt')->with('success', 'Recebimento excluído');
+            return redirect()->route('panel.receipts')->with('success', 'Recebimento excluído');
 
         } catch (Exception $e) {
             return back()->withErrors([

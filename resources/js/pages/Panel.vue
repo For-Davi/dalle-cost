@@ -91,6 +91,7 @@
     originID: 0,
     categoryID: 0,
     year: null,
+    month: null,
   })
 
   const formatCurrency = value => {
@@ -148,6 +149,19 @@
       list = list.filter(item => item.origin_id === filters.value.originID)
     }
 
+    if (filters.value.month !== null) {
+      const selectedMonth = parseInt(filters.value.month)
+
+      list = list.filter(item => {
+        if (!item.period) return false
+
+        const [monthStr, yearStr] = item.period.split('/')
+        const periodMonth = parseInt(monthStr)
+
+        return periodMonth === selectedMonth
+      })
+    }
+
     if (filters.value.year === null) {
       const now = new Date()
       const currentBrazilYear = new Date(
@@ -189,13 +203,11 @@
     return `${month}/${year}`
   })
   const currentMonthTotal = computed(() => {
-    return props.movements
-      .filter(item => 
-        item.period === currentPeriod.value && 
-        item.member?.id === user.value.id
-      )
-      .reduce((acc, item) => acc + Number(item.value || 0), 0);
-  });
+    return getMovements.value.reduce(
+      (acc, item) => acc + Number(item.value || 0),
+      0
+    )
+  })
   const currentFinance = computed(() => Number(props.financeActual?.value ?? 0))
   const remainingAmount = computed(() => {
     return currentFinance.value - currentMonthTotal.value
@@ -253,6 +265,21 @@
       },
     },
   })
+
+  const months = computed(() => [
+    { value: 1, label: 'Janeiro' },
+    { value: 2, label: 'Fevereiro' },
+    { value: 3, label: 'Março' },
+    { value: 4, label: 'Abril' },
+    { value: 5, label: 'Maio' },
+    { value: 6, label: 'Junho' },
+    { value: 7, label: 'Julho' },
+    { value: 8, label: 'Agosto' },
+    { value: 9, label: 'Setembro' },
+    { value: 10, label: 'Outubro' },
+    { value: 11, label: 'Novemebro' },
+    { value: 12, label: 'Dezembro' },
+  ])
 </script>
 <template>
   <PanelLayout>
@@ -320,6 +347,25 @@
           </Select>
         </div>
         <div class="flex flex-col space-y-1.5">
+          <Label>Mês</Label>
+          <Select v-model="filters.month">
+            <SelectTrigger>
+              <SelectValue placeholder="Selecione um mês" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem :value="null">Todos os mêses</SelectItem>
+                <SelectItem
+                  v-for="(item, index) in months"
+                  :value="item.value"
+                  :key="index"
+                  >{{ item.label }}
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+        <div class="flex flex-col space-y-1.5">
           <Label>Ano</Label>
           <Select v-model="filters.year">
             <SelectTrigger>
@@ -344,13 +390,13 @@
     <section class="p-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Mês atual</h3>
+          <h3 class="text-lg font-semibold">Mês atual (Saída)</h3>
           <p class="text-3xl font-bold">
             {{ formatCurrency(currentMonthTotal) }}
           </p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
-          <h3 class="text-lg font-semibold">Renda do mês</h3>
+          <h3 class="text-lg font-semibold">Recebimento do mês (Entrada)</h3>
           <p class="text-3xl font-bold">{{ formatCurrency(currentFinance) }}</p>
         </div>
         <div class="bg-white p-4 rounded-lg shadow">
@@ -379,22 +425,10 @@
     </section>
     <section class="my-2 px-6">
       <div class="bg-white p-4 rounded-lg shadow">
-        <div class="relative w-full max-w-sm items-center">
-          <Input
-            id="search"
-            type="text"
-            v-model="search"
-            placeholder="Filtre os resultados"
-            class="pl-10"
-          />
-          <span
-            class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
-          >
-            <Search class="size-4 text-muted-foreground" />
-          </span>
-        </div>
         <Table class="border-2 mt-2 bg-white">
-          <TableCaption>Lista de movimentações</TableCaption>
+          <TableCaption
+            >Lista de movimentações : {{ getMovements.length }}</TableCaption
+          >
           <TableHeader>
             <TableRow>
               <TableHead class="pl-8"> Data de compra </TableHead>
@@ -440,7 +474,6 @@
           <TableFooter class="bg-white">
             <Pagination
               class="my-2"
-              v-slot="{ page }"
               :items-per-page="itensPerPage"
               :total="getMovements.length"
               :default-page="1"
@@ -448,7 +481,6 @@
             >
               <PaginationContent v-slot="{ items }">
                 <PaginationPrevious />
-
                 <template v-for="(item, index) in items" :key="index">
                   <PaginationItem
                     v-if="item.type === 'page'"
@@ -458,9 +490,7 @@
                     {{ item.value }}
                   </PaginationItem>
                 </template>
-
                 <PaginationEllipsis :index="4" />
-
                 <PaginationNext />
               </PaginationContent>
             </Pagination>

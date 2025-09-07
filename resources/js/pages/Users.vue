@@ -74,7 +74,7 @@
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de usuários</TableCaption>
+          <TableCaption>Lista de usuários : {{ users.length }}</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead class="w-[100px]"> Nome </TableHead>

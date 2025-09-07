@@ -80,7 +80,7 @@
       </section>
       <section class="mt-2">
         <Table class="border-2 bg-white">
-          <TableCaption>Lista de origens</TableCaption>
+          <TableCaption>Lista de origens : {{ origins.length }}</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead class="w-[30%] pl-8"> Nome </TableHead>

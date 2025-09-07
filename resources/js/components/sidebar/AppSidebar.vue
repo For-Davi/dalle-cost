@@ -8,7 +8,7 @@
     ShieldUser,
     List,
     CircleDollarSign,
-    PiggyBank
+    PiggyBank,
   } from 'lucide-vue-next'
   import {
     Sidebar,
