@@ -13,7 +13,7 @@ class MemberController
 
     public function index()
     {
-        $members = Member::all();
+        $members = Member::orderBy('name')->get();
         
         return Inertia::render('Members', [
             'members' => $members,

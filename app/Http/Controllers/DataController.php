@@ -18,13 +18,12 @@ class DataController
     public function index()
     {
         $movements = Movement::with(['member', 'origin', 'category'])
-        ->orderByRaw("SUBSTRING_INDEX(date_buy, '/', -1) DESC")
-        ->orderByRaw("LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(date_buy, '/', -2), '/', 1), 2, '0') DESC")
-        ->orderByRaw("LPAD(SUBSTRING_INDEX(date_buy, '/', 1), 2, '0') DESC")
+        ->latest()
         ->get();
-        $origins = Origin::with('member')->get();
-        $members = Member::all();
-        $categories = Category::all();
+        
+        $origins = Origin::with('member')->orderBy('name')->get();
+        $members = Member::orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
         
         return Inertia::render('Data', [
             'movements' => $movements,
@@ -33,6 +32,7 @@ class DataController
             'categories' => $categories
         ]);
     }
+
     public function store(CreateMovementRequest $request)
     {
         try {

@@ -14,12 +14,13 @@ class UserController
 
     public function index()
     {
-        $users = User::all();
+        $users = User::orderBy('name')->get();
         
         return Inertia::render('Users', [
             'users' => $users,
         ]);
     }
+    
     public function store(RegisterRequest $request)
     {
         try {

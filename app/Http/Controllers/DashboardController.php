@@ -14,22 +14,25 @@ class DashboardController
 
     public function index()
     {
-        $members    = Member::all();
-        $origins    = Origin::with('member')->get();
-        $categories = Category::all();
+        $members    = Member::orderBy('name')->get();
+        $origins    = Origin::with('member')->orderBy('name')->get();
+        $categories = Category::orderBy('name')->get();
+        
         $movements = Movement::with(['member', 'origin', 'category'])
             ->orderByRaw("SUBSTRING_INDEX(date_buy, '/', -1) DESC")
             ->orderByRaw("LPAD(SUBSTRING_INDEX(SUBSTRING_INDEX(date_buy, '/', -2), '/', 1), 2, '0') DESC")
             ->orderByRaw("LPAD(SUBSTRING_INDEX(date_buy, '/', 1), 2, '0') DESC")
             ->get();
+        
         $years = Movement::query()
             ->selectRaw("DISTINCT SUBSTRING(period, 4, 4) as year")
             ->orderBy('year')
             ->pluck('year')
             ->toArray();
+        
         $receipts = Receipt::with(['member'])
-        ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
-        ->get();
+            ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
+            ->get();
 
         return Inertia::render('Panel', [
             'origins'    => $origins,
@@ -37,7 +40,7 @@ class DashboardController
             'categories' => $categories,
             'years'      => $years,
             'movements'  => $movements,
-            'receipts' => $receipts
+            'receipts'   => $receipts
         ]);
     }
 

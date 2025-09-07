@@ -14,7 +14,7 @@ class CategoryController
 
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::orderBy('name')->get();
         
         return Inertia::render('Categories', [
             'categories' => $categories,

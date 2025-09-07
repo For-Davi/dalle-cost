@@ -15,14 +15,15 @@ class OriginController
 
     public function index()
     {
-        $origins = Origin::with('member')->get();
-        $members = Member::all();
+        $origins = Origin::with('member')->orderBy('name')->get();
+        $members = Member::orderBy('name')->get();
         
         return Inertia::render('Origins', [
             'origins' => $origins,
             'members' => $members
         ]);
     }
+
     public function store(CreateOriginRequest $request)
     {
         try {

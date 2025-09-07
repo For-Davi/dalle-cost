@@ -17,6 +17,7 @@ class ReceiptController
         $receipts = Receipt::with(['member'])
         ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
         ->get();
+        
         $members = Member::all();
         
         return Inertia::render('Receipt', [
