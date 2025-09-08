@@ -38,12 +38,12 @@
   import { ref, computed } from 'vue'
   import { usePage } from '@inertiajs/vue3'
   import MovementDetails from '@/components/general/MovementDetails.vue'
-  import { Eye } from 'lucide-vue-next'
-  import { Search } from 'lucide-vue-next'
+  import { Eye, Search, Download } from 'lucide-vue-next'
   import { Input } from '@/components/ui/input'
   import Button from '@/components/ui/button/Button.vue'
   import Label from '@/components/ui/label/Label.vue'
   import TableFooter from '@/components/ui/table/TableFooter.vue'
+  import { useForm } from '@inertiajs/vue3'
 
   const props = defineProps({
     movements: {
@@ -86,7 +86,7 @@
   const itensPerPage = ref(10)
   const currentPage = ref(1)
   const showMovementDetails = ref(false)
-  const filters = ref({
+  const filters = useForm({
     memberID: 0,
     originID: 0,
     categoryID: 0,
@@ -111,6 +111,29 @@
   const setPage = page => {
     currentPage.value = page
   }
+  const exportData = async () => {
+    try {
+      const response = await axios.post(route('dashboard.export'), filters, {
+        responseType: 'blob', // << importante
+        headers: { Accept: 'application/pdf' },
+      })
+      // cria URL para o blob
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: 'application/pdf' })
+      )
+      const link = document.createElement('a')
+      link.href = url
+      // nome do arquivo
+      link.setAttribute('download', 'movements_export.pdf')
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      // libera memória
+      window.URL.revokeObjectURL(url)
+    } catch (e) {
+      console.error('Erro ao gerar PDF', e)
+    }
+  }
 
   const page = usePage()
   const user = computed(() => page.props.auth.user)
@@ -131,26 +154,26 @@
       )
     }
 
-    if (filters.value.memberID === null) {
+    if (filters.memberID === null) {
       list = list.filter(item => item.member_id === null)
-    } else if (filters.value.memberID > 0) {
-      list = list.filter(item => item.member_id === filters.value.memberID)
+    } else if (filters.memberID > 0) {
+      list = list.filter(item => item.member_id === filters.memberID)
     }
 
-    if (filters.value.categoryID === null) {
+    if (filters.categoryID === null) {
       list = list.filter(item => item.category_id === null)
-    } else if (filters.value.categoryID > 0) {
-      list = list.filter(item => item.category_id === filters.value.categoryID)
+    } else if (filters.categoryID > 0) {
+      list = list.filter(item => item.category_id === filters.categoryID)
     }
 
-    if (filters.value.originID === null) {
+    if (filters.originID === null) {
       list = list.filter(item => item.origin_id === null)
-    } else if (filters.value.originID > 0) {
-      list = list.filter(item => item.origin_id === filters.value.originID)
+    } else if (filters.originID > 0) {
+      list = list.filter(item => item.origin_id === filters.originID)
     }
 
-    if (filters.value.month !== null) {
-      const selectedMonth = parseInt(filters.value.month)
+    if (filters.month !== null) {
+      const selectedMonth = parseInt(filters.month)
 
       list = list.filter(item => {
         if (!item.period) return false
@@ -162,7 +185,7 @@
       })
     }
 
-    if (filters.value.year === null) {
+    if (filters.year === null) {
       const now = new Date()
       const currentBrazilYear = new Date(
         now.toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })
@@ -173,7 +196,7 @@
         return periodYear === currentBrazilYear
       })
     } else {
-      const selectedYear = parseInt(filters.value.year)
+      const selectedYear = parseInt(filters.year)
 
       list = list.filter(item => {
         const periodYear = parseInt(item.period?.split('/')[1])
@@ -210,15 +233,15 @@
   const currentReceipt = computed(() => {
     let filteredReceipts = [...props.receipts]
 
-    if (filters.value.memberID !== 0) {
-      const memberId = Number(filters.value.memberID)
+    if (filters.memberID !== 0) {
+      const memberId = Number(filters.memberID)
       filteredReceipts = filteredReceipts.filter(
         receipt => Number(receipt.member_id) === memberId
       )
     }
 
-    if (filters.value.month !== null) {
-      const selectedMonth = parseInt(filters.value.month)
+    if (filters.month !== null) {
+      const selectedMonth = parseInt(filters.month)
 
       filteredReceipts = filteredReceipts.filter(receipt => {
         if (!receipt.period) return false
@@ -230,8 +253,8 @@
       })
     }
 
-    if (filters.value.year !== null) {
-      const selectedYear = parseInt(filters.value.year)
+    if (filters.year !== null) {
+      const selectedYear = parseInt(filters.year)
 
       filteredReceipts = filteredReceipts.filter(receipt => {
         if (!receipt.period) return false
@@ -265,7 +288,6 @@
 
     return totals
   })
-
   const chartData = computed(() => {
     return {
       labels: [
@@ -305,7 +327,6 @@
       },
     },
   })
-
   const months = computed(() => [
     { value: 1, label: 'Janeiro' },
     { value: 2, label: 'Fevereiro' },
@@ -325,7 +346,7 @@
   <PanelLayout>
     <section class="px-6 mt-2">
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-      <div class="flex gap-x-2 bg-white p-4 rounded-lg shadow">
+      <div class="flex items-center gap-x-2 bg-white p-4 rounded-lg shadow">
         <div class="flex flex-col space-y-1.5">
           <Label>Devedor</Label>
           <Select v-model="filters.memberID">
@@ -424,6 +445,12 @@
               </SelectGroup>
             </SelectContent>
           </Select>
+        </div>
+        <div class="flex flex-col">
+          <Button class="cursor-pointer mt-4" @click="exportData">
+            <span>Exportar</span>
+            <Download class="w-4 h-4 mr-2" />
+          </Button>
         </div>
       </div>
     </section>

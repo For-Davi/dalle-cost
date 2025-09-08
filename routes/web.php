@@ -64,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{dataID}', [DataController::class, 'destroy'])->name('destroy');
     });
 
+    Route::prefix('dashboard')->name('dashboard.')->group(function () {
+        Route::post('/', [DashboardController::class, 'export'])->name('export');
+    });
+
     /*
     |--------------------------------------------------------------------------
     | Panel
