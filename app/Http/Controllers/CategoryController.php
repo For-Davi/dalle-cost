@@ -4,22 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Category\CreateCategoryRequest;
 use App\Http\Requests\Category\UpdateCategoryRequest;
-use Exception;
 use App\Models\Category;
+use Exception;
 use Inertia\Inertia;
-use Log;
 
 class CategoryController
 {
-
     public function index()
     {
         $categories = Category::orderBy('name')->get();
-        
+
         return Inertia::render('Categories', [
             'categories' => $categories,
         ]);
     }
+
     public function store(CreateCategoryRequest $request)
     {
         try {
@@ -41,8 +40,8 @@ class CategoryController
         try {
             $category = Category::findOrFail($request->route('categoryID'));
 
-;           $category->name = $request->name;
-            
+            $category->name = $request->name;
+
             $category->save();
 
             return redirect()->route('panel.categories')->with('success', 'Categoria atualizada');
@@ -68,5 +67,4 @@ class CategoryController
             ]);
         }
     }
-
 }

@@ -24,5 +24,4 @@ class Receipt extends Authenticatable
     {
         return $this->belongsTo(Member::class, 'member_id');
     }
-
 }

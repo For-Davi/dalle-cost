@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-         Schema::dropIfExists('finances');
+        Schema::dropIfExists('finances');
     }
 
     public function down(): void

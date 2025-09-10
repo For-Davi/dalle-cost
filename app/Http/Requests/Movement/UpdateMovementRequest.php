@@ -34,23 +34,23 @@ class UpdateMovementRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'movement.exists'   => 'O movimento selecionado não existe.',
+            'movement.exists' => 'O movimento selecionado não existe.',
 
-            'value.required'    => 'O valor é obrigatório.',
-            'value.numeric'     => 'O valor deve ser numérico.',
-            'value.min'         => 'O valor deve ser maior que zero.',
+            'value.required' => 'O valor é obrigatório.',
+            'value.numeric' => 'O valor deve ser numérico.',
+            'value.min' => 'O valor deve ser maior que zero.',
 
-            'period.required'   => 'O período é obrigatório.',
-            'period.regex'      => 'O período deve estar no formato mm/yyyy (ex: 03/2024).',
+            'period.required' => 'O período é obrigatório.',
+            'period.regex' => 'O período deve estar no formato mm/yyyy (ex: 03/2024).',
 
-            'memberID.exists'   => 'O membro selecionado não existe.',
+            'memberID.exists' => 'O membro selecionado não existe.',
 
-            'originID.exists'   => 'A origem selecionada não existe.',
+            'originID.exists' => 'A origem selecionada não existe.',
 
-            'categoryID.exists'   => 'A categoria selecionada não existe.',
+            'categoryID.exists' => 'A categoria selecionada não existe.',
 
             'dateBuy.required' => 'A data de compra é obrigatória',
-            'dateBuy.regex'    => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
+            'dateBuy.regex' => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
 
             'description.string' => 'A descrição deve ser um texto válido.',
         ];

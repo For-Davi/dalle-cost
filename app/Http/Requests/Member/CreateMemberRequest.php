@@ -27,5 +27,4 @@ class CreateMemberRequest extends FormRequest
             'name.max' => 'O nome deve ter no máximo 30 caracteres.',
         ];
     }
-
 }

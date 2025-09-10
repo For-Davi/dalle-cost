@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Exception;
 
 class AuthController
 {
@@ -16,6 +16,7 @@ class AuthController
         try {
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
+
                 return redirect()->route('panel.dashboard');
             }
         } catch (Exception $e) {
@@ -23,6 +24,7 @@ class AuthController
                 'error' => 'Ocorreu um erro no servidor. Por favor, tente novamente.',
             ]);
         }
+
         return back()->withErrors([
             'email' => 'As credenciais fornecidas não correspondem aos nossos registros.',
         ])->onlyInput('email');

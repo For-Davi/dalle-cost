@@ -15,7 +15,7 @@ class CreateOriginRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:30',
-            'payday' => 'required|string'
+            'payday' => 'required|string',
         ];
     }
 

@@ -10,15 +10,15 @@ use Inertia\Inertia;
 
 class MemberController
 {
-
     public function index()
     {
         $members = Member::orderBy('name')->get();
-        
+
         return Inertia::render('Members', [
             'members' => $members,
         ]);
     }
+
     public function store(CreateMemberRequest $request)
     {
         try {
@@ -40,8 +40,8 @@ class MemberController
         try {
             $member = Member::findOrFail($request->route('memberID'));
 
-;            $member->name = $request->name;
-            
+            $member->name = $request->name;
+
             $member->save();
 
             return redirect()->route('panel.members')->with('success', 'Membro atualizado');
@@ -67,5 +67,4 @@ class MemberController
             ]);
         }
     }
-
 }

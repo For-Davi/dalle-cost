@@ -11,30 +11,29 @@ use Inertia\Inertia;
 
 class ReceiptController
 {
-
     public function index()
     {
         $receipts = Receipt::with(['member'])
-        ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
-        ->get();
-        
+            ->orderByRaw("STR_TO_DATE(date_receipt, '%d/%m/%Y') DESC")
+            ->get();
+
         $members = Member::all();
-        
+
         return Inertia::render('Receipt', [
             'receipts' => $receipts,
-            'members' => $members
+            'members' => $members,
         ]);
     }
+
     public function store(CreateReceiptRequest $request)
     {
         try {
-                Receipt::create([
-                    'value'       => $request->value,
-                    'member_id'   => $request->memberID,
-                    'period'      => $request->period,
-                    'date_receipt'=> $request->dateReceipt,
-                ]);
-
+            Receipt::create([
+                'value' => $request->value,
+                'member_id' => $request->memberID,
+                'period' => $request->period,
+                'date_receipt' => $request->dateReceipt,
+            ]);
 
             return redirect()->route('panel.receipts')->with('success', 'Recebimento criado');
 
@@ -50,11 +49,11 @@ class ReceiptController
         try {
             $receipt = Receipt::findOrFail($request->route('receiptID'));
 
-;           $receipt->value = $request->value;
-;           $receipt->period = $request->period;
-;           $receipt->date_receipt = $request->dateReceipt;
-;           $receipt->member_id = $request->memberID;
-            
+            $receipt->value = $request->value;
+            $receipt->period = $request->period;
+            $receipt->date_receipt = $request->dateReceipt;
+            $receipt->member_id = $request->memberID;
+
             $receipt->save();
 
             return redirect()->route('panel.receipts')->with('success', 'Recimento atualizado');
@@ -80,5 +79,4 @@ class ReceiptController
             ]);
         }
     }
-
 }

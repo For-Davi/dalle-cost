@@ -15,7 +15,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:30',
-            'category' => 'sometimes|exists:categories,id'
+            'category' => 'sometimes|exists:categories,id',
         ];
     }
 
@@ -26,14 +26,14 @@ class UpdateCategoryRequest extends FormRequest
             'name.string' => 'O nome deve ser uma string.',
             'name.min' => 'O nome deve ter no mínimo 3 caracteres.',
             'name.max' => 'O nome deve ter no máximo 30 caracteres.',
-            'category.exists' => 'A categoria selecionado não existe.'
+            'category.exists' => 'A categoria selecionado não existe.',
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'category' => $this->route('categoryID')
+            'category' => $this->route('categoryID'),
         ]);
     }
 }

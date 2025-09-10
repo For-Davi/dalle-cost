@@ -20,7 +20,7 @@ class Movement extends Authenticatable
         'origin_id',
         'category_id',
         'date_buy',
-        'description'
+        'description',
     ];
 
     public function member()
@@ -37,5 +37,4 @@ class Movement extends Authenticatable
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
-
 }

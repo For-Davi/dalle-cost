@@ -4,23 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Http\Requests\User\UpdateUserRequest;
-use Exception;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
 class UserController
 {
-
     public function index()
     {
         $users = User::orderBy('name')->get();
-        
+
         return Inertia::render('Users', [
             'users' => $users,
         ]);
     }
-    
+
     public function store(RegisterRequest $request)
     {
         try {
@@ -44,10 +43,10 @@ class UserController
         try {
             $user = User::findOrFail($request->route('userID'));
 
-;            $user->name = $request->name;
+            $user->name = $request->name;
             $user->email = $request->email;
             $user->role = $request->role;
-            
+
             $user->save();
 
             return redirect()->route('panel.users')->with('success', 'Usuário atualizado');
@@ -73,5 +72,4 @@ class UserController
             ]);
         }
     }
-
 }

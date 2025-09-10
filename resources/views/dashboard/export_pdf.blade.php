@@ -113,13 +113,14 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($movs->sortBy('origin.payday') as $mov)
+            {{--@foreach($movs->sortBy('origin.payday') as $mov)--}}
+             @foreach($movs->filter(fn($mov) => $mov->origin)->sortBy('origin.payday') as $mov)
               <tr>
                 <td class="text-right">
                   R$ {{ number_format($mov->value, 2, ',', '.') }}
                 </td>
                 <td>{{ $mov->description ?? '' }}</td>
-                <td>{{ $mov->origin->payday ?? '' }}</td>
+                <td>{{ optional($mov->origin)->payday }}</td>
               </tr>
             @endforeach
             <tr class="total-row">

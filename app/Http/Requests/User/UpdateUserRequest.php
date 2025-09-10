@@ -15,16 +15,16 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         $userId = $this->route('userID');
-        
+
         return [
             'name' => 'required|string|min:3|max:30',
             'email' => [
                 'required',
                 'string',
                 'email',
-                Rule::unique('users')->ignore($userId)
+                Rule::unique('users')->ignore($userId),
             ],
-            'user' => 'sometimes|exists:users,id'
+            'user' => 'sometimes|exists:users,id',
         ];
     }
 
@@ -39,14 +39,14 @@ class UpdateUserRequest extends FormRequest
             'email.string' => 'O e-mail deve ser uma string.',
             'email.email' => 'O e-mail deve ser um endereço de e-mail válido.',
             'email.unique' => 'Este e-mail já está em uso por outro usuário.',
-            'user.exists' => 'O usuário selecionado não existe.'
+            'user.exists' => 'O usuário selecionado não existe.',
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'user' => $this->route('userID')
+            'user' => $this->route('userID'),
         ]);
     }
 }

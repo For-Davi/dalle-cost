@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Origin extends Model
 {
@@ -15,12 +15,11 @@ class Origin extends Model
     protected $fillable = [
         'name',
         'payday',
-        'member_id'
+        'member_id',
     ];
 
     public function member()
     {
         return $this->belongsTo(Member::class, 'member_id');
     }
-
 }

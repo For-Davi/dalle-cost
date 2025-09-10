@@ -34,28 +34,28 @@ class CreateMovementRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'value.required'   => 'O valor é obrigatório',
-            'value.numeric'    => 'O valor deve ser numérico',
-            'value.min'        => 'O valor deve ser maior que zero',
+            'value.required' => 'O valor é obrigatório',
+            'value.numeric' => 'O valor deve ser numérico',
+            'value.min' => 'O valor deve ser maior que zero',
 
-            'period.required'  => 'O período é obrigatório',
-            'period.regex'     => 'O período deve estar no formato mm/yyyy (ex: 03/2024)',
+            'period.required' => 'O período é obrigatório',
+            'period.regex' => 'O período deve estar no formato mm/yyyy (ex: 03/2024)',
 
             'quantity.required' => 'A quantidade é obrigatória',
-            'quantity.integer'  => 'A quantidade deve ser um número inteiro',
-            'quantity.min'      => 'A quantidade mínima permitida é 1',
-            'quantity.max'      => 'A quantidade máxima permitida é 12',
+            'quantity.integer' => 'A quantidade deve ser um número inteiro',
+            'quantity.min' => 'A quantidade mínima permitida é 1',
+            'quantity.max' => 'A quantidade máxima permitida é 12',
 
-            'memberID.exists'   => 'O membro selecionado não existe',
+            'memberID.exists' => 'O membro selecionado não existe',
 
-            'originID.exists'   => 'A origem selecionada não existe',
+            'originID.exists' => 'A origem selecionada não existe',
 
-            'categoryID.exists'   => 'A categoria selecionada não existe',
+            'categoryID.exists' => 'A categoria selecionada não existe',
 
-            'description.string'   => 'A descrição deve ser um texto válido',
+            'description.string' => 'A descrição deve ser um texto válido',
 
             'dateBuy.required' => 'A data de compra é obrigatória',
-            'dateBuy.regex'    => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
+            'dateBuy.regex' => 'A data de compra deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
         ];
     }
 }

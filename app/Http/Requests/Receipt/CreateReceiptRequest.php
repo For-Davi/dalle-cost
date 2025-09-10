@@ -30,14 +30,14 @@ class CreateReceiptRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'value.required'   => 'O valor é obrigatório',
-            'value.numeric'    => 'O valor deve ser numérico',
-            'value.min'        => 'O valor deve ser maior que zero',
-            'period.required'  => 'O período é obrigatório',
-            'period.regex'     => 'O período deve estar no formato mm/yyyy (ex: 03/2024)',
-            'dateReceipt.required'  => 'A data de recebimento é obrigatório',
-            'dateReceipt.regex'     => 'A data de recebimento deve estar no formato mm/yyyy (ex: 03/2024)',
-            'memberID.exists'   => 'O membro selecionado não existe',
+            'value.required' => 'O valor é obrigatório',
+            'value.numeric' => 'O valor deve ser numérico',
+            'value.min' => 'O valor deve ser maior que zero',
+            'period.required' => 'O período é obrigatório',
+            'period.regex' => 'O período deve estar no formato mm/yyyy (ex: 03/2024)',
+            'dateReceipt.required' => 'A data de recebimento é obrigatório',
+            'dateReceipt.regex' => 'A data de recebimento deve estar no formato mm/yyyy (ex: 03/2024)',
+            'memberID.exists' => 'O membro selecionado não existe',
 
         ];
     }

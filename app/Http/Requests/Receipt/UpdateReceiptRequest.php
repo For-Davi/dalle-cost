@@ -31,15 +31,15 @@ class UpdateReceiptRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'receipt.exists'   => 'O recimento selecionado não existe.',
-            'value.required'    => 'O valor é obrigatório.',
-            'value.numeric'     => 'O valor deve ser numérico.',
-            'value.min'         => 'O valor deve ser maior que zero.',
-            'period.required'   => 'O período é obrigatório.',
-            'period.regex'      => 'O período deve estar no formato mm/yyyy (ex: 03/2024).',
-            'memberID.exists'   => 'O membro selecionado não existe.',
+            'receipt.exists' => 'O recimento selecionado não existe.',
+            'value.required' => 'O valor é obrigatório.',
+            'value.numeric' => 'O valor deve ser numérico.',
+            'value.min' => 'O valor deve ser maior que zero.',
+            'period.required' => 'O período é obrigatório.',
+            'period.regex' => 'O período deve estar no formato mm/yyyy (ex: 03/2024).',
+            'memberID.exists' => 'O membro selecionado não existe.',
             'dateReceipt.required' => 'A data de recebimento é obrigatória',
-            'dateReceipt.regex'    => 'A data de recebimento deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
+            'dateReceipt.regex' => 'A data de recebimento deve estar no formato dd/mm/yyyy (ex: 25/12/2024)',
         ];
     }
 

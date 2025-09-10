@@ -9,27 +9,26 @@ use App\Models\Member;
 use App\Models\Movement;
 use App\Models\Origin;
 use Exception;
-use Inertia\Inertia;
 use Illuminate\Support\Carbon;
+use Inertia\Inertia;
 
 class DataController
 {
-
     public function index()
     {
         $movements = Movement::with(['member', 'origin', 'category'])
-        ->latest()
-        ->get();
-        
+            ->latest()
+            ->get();
+
         $origins = Origin::with('member')->orderBy('name')->get();
         $members = Member::orderBy('name')->get();
         $categories = Category::orderBy('name')->get();
-        
+
         return Inertia::render('Data', [
             'movements' => $movements,
             'origins' => $origins,
             'members' => $members,
-            'categories' => $categories
+            'categories' => $categories,
         ]);
     }
 
@@ -42,13 +41,13 @@ class DataController
 
             for ($i = 0; $i < $request->quantity; $i++) {
                 Movement::create([
-                    'value'       => $request->value,
-                    'date_buy'       => $request->dateBuy,
-                    'member_id'   => $request->memberID,
-                    'origin_id'   => $request->originID,
-                    'category_id'   => $request->categoryID,
+                    'value' => $request->value,
+                    'date_buy' => $request->dateBuy,
+                    'member_id' => $request->memberID,
+                    'origin_id' => $request->originID,
+                    'category_id' => $request->categoryID,
                     'description' => $request->description,
-                    'period'      => $date->format('m/Y'),
+                    'period' => $date->format('m/Y'),
                 ]);
 
                 $date->addMonth();
@@ -68,14 +67,14 @@ class DataController
         try {
             $movement = Movement::findOrFail($request->route('dataID'));
 
-;           $movement->value = $request->value;
-;           $movement->period = $request->period;
-;           $movement->date_buy = $request->dateBuy;
-;           $movement->member_id = $request->memberID;
-;           $movement->origin_id = $request->originID;
-;           $movement->category_id = $request->categoryID;
-;           $movement->description = $request->description;
-            
+            $movement->value = $request->value;
+            $movement->period = $request->period;
+            $movement->date_buy = $request->dateBuy;
+            $movement->member_id = $request->memberID;
+            $movement->origin_id = $request->originID;
+            $movement->category_id = $request->categoryID;
+            $movement->description = $request->description;
+
             $movement->save();
 
             return redirect()->route('panel.data')->with('success', 'Movimentação atualizada');
@@ -101,5 +100,4 @@ class DataController
             ]);
         }
     }
-
 }

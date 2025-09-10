@@ -15,7 +15,7 @@ class UpdateMemberRequest extends FormRequest
     {
         return [
             'name' => 'required|string|min:3|max:30',
-            'member' => 'sometimes|exists:members,id'
+            'member' => 'sometimes|exists:members,id',
         ];
     }
 
@@ -26,14 +26,14 @@ class UpdateMemberRequest extends FormRequest
             'name.string' => 'O nome deve ser uma string.',
             'name.min' => 'O nome deve ter no mínimo 3 caracteres.',
             'name.max' => 'O nome deve ter no máximo 30 caracteres.',
-            'user.exists' => 'O usuário selecionado não existe.'
+            'user.exists' => 'O usuário selecionado não existe.',
         ];
     }
 
     protected function prepareForValidation()
     {
         $this->merge([
-            'member' => $this->route('memberID')
+            'member' => $this->route('memberID'),
         ]);
     }
 }
