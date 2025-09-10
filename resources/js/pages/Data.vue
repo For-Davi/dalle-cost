@@ -164,6 +164,7 @@
           <TableHeader>
             <TableRow>
               <TableHead class="pl-8"> Data de compra </TableHead>
+              <TableHead class="pl-8"> Parcela </TableHead>
               <TableHead class="pl-8"> Período </TableHead>
               <TableHead class="pl-8"> Devedor </TableHead>
               <TableHead class="pl-8"> Origem </TableHead>
@@ -176,6 +177,9 @@
             <TableRow v-for="(item, index) in paginatedMovements" :key="index">
               <TableCell class="pl-8">
                 {{ item.date_buy }}
+              </TableCell>
+              <TableCell class="pl-8 font-bold" :class="item.installment && item.installment === '1/1' ? 'text-green-500' : 'text-red-500'">
+                {{ item.installment ?? '' }}
               </TableCell>
               <TableCell class="pl-8">
                 {{ item.period }}

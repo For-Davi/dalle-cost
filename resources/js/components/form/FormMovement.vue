@@ -68,6 +68,7 @@
     originID: null,
     categoryID: null,
   })
+  const installment = ref('');
 
   const isEditing = computed(() => !!props.movement)
 
@@ -186,6 +187,7 @@
         form.originID = props.movement.origin_id
         form.categoryID = props.movement.category_id
         form.dateBuy = props.movement.date_buy
+        installment.value = props.movement.installment ?? ''
       }
     }
   )
@@ -246,6 +248,15 @@
               <span v-if="form.errors.period" class="text-red-500 text-sm">
                 {{ form.errors.period }}
               </span>
+            </div>
+            <div v-if="props.movement" class="flex flex-col space-y-1.5">
+              <Label for="period">Parcela</Label>
+              <Input
+                id="installment"
+                :placeholder="installment.trim() === '' ? 'Sem informação' : ''"
+                v-model="installment"
+                disabled
+              />
             </div>
             <div v-if="!props.movement" class="flex flex-col space-y-1.5">
               <Label>Quantidade de lançamentos</Label>

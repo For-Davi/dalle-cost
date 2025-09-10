@@ -108,6 +108,7 @@
           <thead>
             <tr>
               <th>Valor</th>
+              <th>Parcela</th>
               <th>Descrição</th>
               <th>Data de Pagamento</th>
             </tr>
@@ -119,6 +120,7 @@
                 <td class="text-right">
                   R$ {{ number_format($mov->value, 2, ',', '.') }}
                 </td>
+                <td>{{ $mov->installment ?? '' }}</td>
                 <td>{{ $mov->description ?? '' }}</td>
                 <td>{{ optional($mov->origin)->payday }}</td>
               </tr>
@@ -127,6 +129,7 @@
               <td class="text-right">
                 R$ {{ number_format($movs->sum('value'), 2, ',', '.') }}
               </td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
