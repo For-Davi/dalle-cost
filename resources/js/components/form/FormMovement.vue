@@ -68,7 +68,7 @@
     originID: null,
     categoryID: null,
   })
-  const installment = ref('');
+  const installment = ref('')
 
   const isEditing = computed(() => !!props.movement)
 
@@ -195,14 +195,16 @@
 
 <template>
   <Dialog :open="open" @update:open="value => $emit('close', value)">
-    <DialogContent class="sm:max-w-[425px]">
-      <ScrollArea class="h-full max-h-[600px] rounded-md">
-        <form @submit.prevent="submit">
-          <DialogHeader>
-            <DialogTitle class="font-bold">
+    <DialogContent
+      class="sm:max-w-[500px] max-w-[95vw] max-h-[90vh] overflow-hidden"
+    >
+      <ScrollArea class="h-full max-h-[calc(90vh-2rem)] rounded-md">
+        <form @submit.prevent="submit" class="p-1">
+          <DialogHeader class="px-4 pt-4">
+            <DialogTitle class="font-bold text-lg sm:text-xl">
               {{ isEditing ? 'Editar Movimentação' : 'Nova Movimentação' }}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription class="text-sm sm:text-base">
               {{
                 isEditing
                   ? 'Atualize os dados da movimentação'
@@ -210,61 +212,88 @@
               }}
             </DialogDescription>
           </DialogHeader>
-          <div class="grid gap-4 py-4">
+
+          <div class="grid gap-4 py-4 px-4">
+            <!-- Valor -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="value">Valor</Label>
+              <Label for="value" class="text-sm sm:text-base">Valor</Label>
               <Input
                 id="value"
                 placeholder="R$ Valor da movimentação"
                 v-model="form.value"
                 @keypress="onlyNumbers"
+                class="w-full text-sm sm:text-base"
               />
-              <span v-if="form.errors.value" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.value"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.value }}
               </span>
             </div>
+
+            <!-- Data -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="dateBuy">Data</Label>
+              <Label for="dateBuy" class="text-sm sm:text-base">Data</Label>
               <Input
                 id="dateBuy"
                 placeholder="Data da compra DD/MM/YYYY"
                 v-model="form.dateBuy"
                 :maxlength="10"
                 @input="formatDateBuy"
+                class="w-full text-sm sm:text-base"
               />
-              <span v-if="form.errors.dateBuy" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.dateBuy"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.dateBuy }}
               </span>
             </div>
+
+            <!-- Período -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="period">Período</Label>
+              <Label for="period" class="text-sm sm:text-base">Período</Label>
               <Input
                 id="period"
                 placeholder="Período de pagamento MM/YYYY"
                 v-model="form.period"
                 :maxlength="7"
                 @input="formatDatePeriod"
+                class="w-full text-sm sm:text-base"
               />
-              <span v-if="form.errors.period" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.period"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.period }}
               </span>
             </div>
+
+            <!-- Parcela (se editing) -->
             <div v-if="props.movement" class="flex flex-col space-y-1.5">
-              <Label for="period">Parcela</Label>
+              <Label for="installment" class="text-sm sm:text-base"
+                >Parcela</Label
+              >
               <Input
                 id="installment"
                 :placeholder="installment.trim() === '' ? 'Sem informação' : ''"
                 v-model="installment"
                 disabled
+                class="w-full text-sm sm:text-base"
               />
             </div>
+
+            <!-- Quantidade de lançamentos (se novo) -->
             <div v-if="!props.movement" class="flex flex-col space-y-1.5">
-              <Label>Quantidade de lançamentos</Label>
+              <Label class="text-sm sm:text-base"
+                >Quantidade de lançamentos</Label
+              >
               <Select v-model="form.quantity">
-                <SelectTrigger class="w-full">
-                  <SelectValue placeholder="Selecione um devedor" />
+                <SelectTrigger class="w-full text-sm sm:text-base">
+                  <SelectValue placeholder="Selecione a quantidade" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-60 overflow-y-auto">
                   <SelectGroup>
                     <SelectItem :value="1">Apenas 1</SelectItem>
                     <SelectItem :value="2">...2</SelectItem>
@@ -281,90 +310,120 @@
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span v-if="form.errors.memberID" class="text-red-500 text-sm">
-                {{ form.errors.memberID }}
-              </span>
             </div>
+
+            <!-- Devedor -->
             <div class="flex flex-col space-y-1.5">
-              <Label>Devedor</Label>
+              <Label class="text-sm sm:text-base">Devedor</Label>
               <Select v-model="form.memberID">
-                <SelectTrigger class="w-full">
+                <SelectTrigger class="w-full text-sm sm:text-base">
                   <SelectValue placeholder="Selecione um devedor" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-60 overflow-y-auto">
                   <SelectGroup>
                     <SelectItem :value="null">Sem devedor</SelectItem>
                     <SelectItem
                       v-for="(item, index) in members"
                       :value="item.id"
                       :key="index"
-                      >{{ item.name }}</SelectItem
+                      class="text-sm sm:text-base"
                     >
+                      {{ item.name }}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span v-if="form.errors.memberID" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.memberID"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.memberID }}
               </span>
             </div>
+
+            <!-- Origem -->
             <div class="flex flex-col space-y-1.5">
-              <Label>Origem</Label>
+              <Label class="text-sm sm:text-base">Origem</Label>
               <Select v-model="form.originID">
-                <SelectTrigger class="w-full">
+                <SelectTrigger class="w-full text-sm sm:text-base">
                   <SelectValue placeholder="Selecione uma origem" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-60 overflow-y-auto">
                   <SelectGroup>
                     <SelectItem :value="null">Sem origem</SelectItem>
                     <SelectItem
                       v-for="(item, index) in origins"
                       :value="item.id"
                       :key="index"
-                      >{{ item.name }}</SelectItem
+                      class="text-sm sm:text-base"
                     >
+                      {{ item.name }}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span v-if="form.errors.originID" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.originID"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.originID }}
               </span>
             </div>
+
+            <!-- Categoria -->
             <div class="flex flex-col space-y-1.5">
-              <Label>Categoria</Label>
+              <Label class="text-sm sm:text-base">Categoria</Label>
               <Select v-model="form.categoryID">
-                <SelectTrigger class="w-full">
+                <SelectTrigger class="w-full text-sm sm:text-base">
                   <SelectValue placeholder="Selecione uma categoria" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-60 overflow-y-auto">
                   <SelectGroup>
                     <SelectItem :value="null">Sem categoria</SelectItem>
                     <SelectItem
                       v-for="(item, index) in categories"
                       :value="item.id"
                       :key="index"
-                      >{{ item.name }}</SelectItem
+                      class="text-sm sm:text-base"
                     >
+                      {{ item.name }}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span v-if="form.errors.categoryID" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.categoryID"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.categoryID }}
               </span>
             </div>
+
+            <!-- Descrição -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="description">Descrição</Label>
+              <Label for="description" class="text-sm sm:text-base"
+                >Descrição</Label
+              >
               <Textarea
                 placeholder="Anote observações dessa movimentação"
-                class="resize-none w-[380px]"
+                class="resize-none w-full min-h-[80px] text-sm sm:text-base"
                 v-model="form.description"
               />
-              <span v-if="form.errors.description" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.description"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.description }}
               </span>
             </div>
           </div>
-          <DialogFooter>
-            <Button type="submit" class="w-full" :disabled="form.processing">
+
+          <DialogFooter class="px-4 pb-4">
+            <Button
+              type="submit"
+              class="w-full text-sm sm:text-base py-2"
+              :disabled="form.processing"
+            >
               {{ isEditing ? 'Atualizar' : 'Salvar' }}
             </Button>
           </DialogFooter>

@@ -72,13 +72,15 @@
 
 <template>
   <Dialog :open="open" @update:open="value => $emit('close', value)">
-    <DialogContent class="sm:max-w-[425px]">
-      <form @submit.prevent="submit">
-        <DialogHeader>
-          <DialogTitle class="font-bold">
+    <DialogContent
+      class="sm:max-w-[450px] max-w-[95vw] max-h-[90vh] overflow-hidden"
+    >
+      <form @submit.prevent="submit" class="p-1">
+        <DialogHeader class="px-4 pt-4">
+          <DialogTitle class="font-bold text-lg sm:text-xl">
             {{ isEditing ? 'Editar Categoria' : 'Nova Categoria' }}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription class="text-sm sm:text-base">
             {{
               isEditing
                 ? 'Atualize os dados da categoria'
@@ -86,17 +88,32 @@
             }}
           </DialogDescription>
         </DialogHeader>
-        <div class="grid gap-4 py-4">
+
+        <div class="grid gap-4 py-4 px-4">
           <div class="flex flex-col space-y-1.5">
-            <Label for="name">Nome</Label>
-            <Input id="name" placeholder="Nome completo" v-model="form.name" />
-            <span v-if="form.errors.name" class="text-red-500 text-sm">
+            <Label for="name" class="text-sm sm:text-base">Nome</Label>
+            <Input
+              id="name"
+              placeholder="Nome da categoria"
+              v-model="form.name"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
+            />
+            <span
+              v-if="form.errors.name"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.name }}
             </span>
           </div>
         </div>
-        <DialogFooter>
-          <Button type="submit" class="w-full" :disabled="form.processing">
+
+        <DialogFooter class="px-4 pb-4">
+          <Button
+            type="submit"
+            class="w-full text-sm sm:text-base py-2"
+            :disabled="form.processing"
+          >
             {{ isEditing ? 'Atualizar' : 'Salvar' }}
           </Button>
         </DialogFooter>

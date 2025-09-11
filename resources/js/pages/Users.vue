@@ -59,55 +59,77 @@
 
 <template>
   <PanelLayout>
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Usuários</h1>
-      <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
+    <div class="p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Usuários</h1>
+
+      <section
+        class="bg-white p-3 sm:p-4 rounded-lg shadow flex justify-end gap-2"
+      >
         <FormUser
           :user="dataEdit"
           v-model:open="isFormUserOpen"
           @close="setDataEdit(null, false)"
         />
-        <Button class="cursor-pointer" @click="openCreateForm">
+        <Button
+          class="cursor-pointer text-sm sm:text-base w-full sm:w-auto"
+          @click="openCreateForm"
+        >
           <span>Novo usuário</span>
-          <Plus class="w-4 h-4 mr-2" />
+          <Plus class="w-4 h-4 mr-1 sm:mr-2" />
         </Button>
       </section>
-      <section class="mt-2">
-        <Table class="border-2 bg-white">
-          <TableCaption>Lista de usuários : {{ users.length }}</TableCaption>
+
+      <section class="mt-2 overflow-x-auto">
+        <Table class="border-2 bg-white min-w-full">
+          <TableCaption class="text-sm sm:text-base">
+            Lista de usuários : {{ users.length }}
+          </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="w-[100px]"> Nome </TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Ação</TableHead>
+              <TableHead class="text-sm sm:text-base px-2 sm:px-4"
+                >Nome</TableHead
+              >
+              <TableHead class="text-sm sm:text-base px-2 sm:px-4"
+                >Email</TableHead
+              >
+              <TableHead class="text-sm sm:text-base px-2 sm:px-4 text-right"
+                >Ação</TableHead
+              >
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in users" :key="index">
-              <TableCell>
+              <TableCell class="text-sm sm:text-base px-2 sm:px-4">
                 {{ item.name }}
               </TableCell>
-              <TableCell>{{ item.email }}</TableCell>
-              <TableCell>
+              <TableCell class="text-sm sm:text-base px-2 sm:px-4">
+                {{ item.email }}
+              </TableCell>
+              <TableCell class="px-2 sm:px-4 text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" class="cursor-pointer">
-                      <Ellipsis />
+                    <Button variant="ghost" class="cursor-pointer h-8 w-8 p-0">
+                      <Ellipsis class="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent class="w-56">
-                    <DropdownMenuLabel>Opções</DropdownMenuLabel>
+                  <DropdownMenuContent class="w-48 sm:w-56">
+                    <DropdownMenuLabel class="text-xs sm:text-sm"
+                      >Opções</DropdownMenuLabel
+                    >
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="setDataEdit(item, true)">
-                        <Pencil class="w-4 h-4 mr-2" />
+                      <DropdownMenuItem
+                        @click="setDataEdit(item, true)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Pencil class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Editar</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        class="text-red-500"
+                        class="text-red-500 text-xs sm:text-sm"
                         @click="exclude(item.id)"
                       >
-                        <Trash class="w-4 h-4 mr-2" color="red" />
+                        <Trash class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Excluir</span>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>

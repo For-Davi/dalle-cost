@@ -176,14 +176,16 @@
 
 <template>
   <Dialog :open="open" @update:open="value => $emit('close', value)">
-    <DialogContent class="sm:max-w-[425px]">
-      <ScrollArea class="h-full max-h-[600px] rounded-md">
-        <form @submit.prevent="submit">
-          <DialogHeader>
-            <DialogTitle class="font-bold">
+    <DialogContent
+      class="sm:max-w-[500px] max-w-[95vw] max-h-[90vh] overflow-hidden"
+    >
+      <ScrollArea class="h-full max-h-[calc(90vh-2rem)] rounded-md">
+        <form @submit.prevent="submit" class="p-1">
+          <DialogHeader class="px-4 pt-4">
+            <DialogTitle class="font-bold text-lg sm:text-xl">
               {{ isEditing ? 'Editar Recebimento' : 'Novo Recebimento' }}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription class="text-sm sm:text-base">
               {{
                 isEditing
                   ? 'Atualize os dados do recebimento'
@@ -191,81 +193,124 @@
               }}
             </DialogDescription>
           </DialogHeader>
-          <div class="grid gap-4 py-4">
+
+          <div class="grid gap-4 py-4 px-4">
+            <!-- Valor -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="value">Valor</Label>
+              <Label for="value" class="text-sm sm:text-base">Valor</Label>
               <Input
                 id="value"
                 placeholder="R$ Valor da movimentação"
                 v-model="form.value"
                 @keypress="onlyNumbers"
+                class="w-full text-sm sm:text-base"
+                :disabled="form.processing"
               />
-              <span v-if="form.errors.value" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.value"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.value }}
               </span>
             </div>
+
+            <!-- Data -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="dateBuy">Data</Label>
+              <Label for="dateReceipt" class="text-sm sm:text-base">Data</Label>
               <Input
                 id="dateReceipt"
                 placeholder="Data da compra DD/MM/YYYY"
                 v-model="form.dateReceipt"
                 :maxlength="10"
                 @input="formatDateReceipt"
+                class="w-full text-sm sm:text-base"
+                :disabled="form.processing"
               />
-              <span v-if="form.errors.dateReceipt" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.dateReceipt"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.dateReceipt }}
               </span>
             </div>
+
+            <!-- Período -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="period">Período</Label>
+              <Label for="period" class="text-sm sm:text-base">Período</Label>
               <Input
                 id="period"
                 placeholder="Período de pagamento MM/YYYY"
                 v-model="form.period"
                 :maxlength="7"
                 @input="formatDatePeriod"
+                class="w-full text-sm sm:text-base"
+                :disabled="form.processing"
               />
-              <span v-if="form.errors.period" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.period"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.period }}
               </span>
             </div>
+
+            <!-- Pagante -->
             <div class="flex flex-col space-y-1.5">
-              <Label>Pagante</Label>
-              <Select v-model="form.memberID">
-                <SelectTrigger class="w-full">
+              <Label class="text-sm sm:text-base">Pagante</Label>
+              <Select v-model="form.memberID" :disabled="form.processing">
+                <SelectTrigger class="w-full text-sm sm:text-base">
                   <SelectValue placeholder="Selecione um devedor" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent class="max-h-60 overflow-y-auto">
                   <SelectGroup>
-                    <SelectItem :value="null">Sem devedor</SelectItem>
+                    <SelectItem :value="null" class="text-sm sm:text-base">
+                      Sem devedor
+                    </SelectItem>
                     <SelectItem
                       v-for="(item, index) in members"
                       :value="item.id"
                       :key="index"
-                      >{{ item.name }}</SelectItem
+                      class="text-sm sm:text-base"
                     >
+                      {{ item.name }}
+                    </SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span v-if="form.errors.memberID" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.memberID"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.memberID }}
               </span>
             </div>
+
+            <!-- Descrição -->
             <div class="flex flex-col space-y-1.5">
-              <Label for="description">Descrição</Label>
+              <Label for="description" class="text-sm sm:text-base"
+                >Descrição</Label
+              >
               <Textarea
                 placeholder="Anote observações dessa movimentação"
-                class="resize-none w-[380px]"
+                class="resize-none w-full min-h-[80px] text-sm sm:text-base"
                 v-model="form.description"
+                :disabled="form.processing"
               />
-              <span v-if="form.errors.description" class="text-red-500 text-sm">
+              <span
+                v-if="form.errors.description"
+                class="text-red-500 text-xs sm:text-sm"
+              >
                 {{ form.errors.description }}
               </span>
             </div>
           </div>
-          <DialogFooter>
-            <Button type="submit" class="w-full" :disabled="form.processing">
+
+          <DialogFooter class="px-4 pb-4">
+            <Button
+              type="submit"
+              class="w-full text-sm sm:text-base py-2"
+              :disabled="form.processing"
+            >
               {{ isEditing ? 'Atualizar' : 'Salvar' }}
             </Button>
           </DialogFooter>

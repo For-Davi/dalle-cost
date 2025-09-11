@@ -45,7 +45,8 @@
             {{ props.movement?.date_buy }}
           </p>
           <p>
-            <span class="font-bold">Parcela:</span> {{ props.movement?.installment ?? '—' }}
+            <span class="font-bold">Parcela:</span>
+            {{ props.movement?.installment ?? '—' }}
           </p>
           <p>
             <span class="font-bold">Período:</span> {{ props.movement?.period }}

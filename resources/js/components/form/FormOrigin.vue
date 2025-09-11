@@ -92,64 +92,98 @@
 
 <template>
   <Dialog :open="open" @update:open="value => $emit('close', value)">
-    <DialogContent class="sm:max-w-[425px]">
-      <form @submit.prevent="submit">
-        <DialogHeader>
-          <DialogTitle class="font-bold">
+    <DialogContent
+      class="sm:max-w-[450px] max-w-[95vw] max-h-[90vh] overflow-hidden"
+    >
+      <form @submit.prevent="submit" class="p-1">
+        <DialogHeader class="px-4 pt-4">
+          <DialogTitle class="font-bold text-lg sm:text-xl">
             {{ isEditing ? 'Editar Origem' : 'Nova Origem' }}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription class="text-sm sm:text-base">
             {{
               isEditing ? 'Atualize os dados da origem' : 'Crie uma nova origem'
             }}
           </DialogDescription>
         </DialogHeader>
-        <div class="grid gap-4 py-4">
+
+        <div class="grid gap-4 py-4 px-4">
+          <!-- Nome -->
           <div class="flex flex-col space-y-1.5">
-            <Label for="name">Nome</Label>
-            <Input id="name" placeholder="Nome da origem" v-model="form.name" />
-            <span v-if="form.errors.name" class="text-red-500 text-sm">
+            <Label for="name" class="text-sm sm:text-base">Nome</Label>
+            <Input
+              id="name"
+              placeholder="Nome da origem"
+              v-model="form.name"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
+            />
+            <span
+              v-if="form.errors.name"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.name }}
             </span>
           </div>
+
+          <!-- Pagamento -->
           <div class="flex flex-col space-y-1.5">
-            <Label for="payday">Pagamento</Label>
+            <Label for="payday" class="text-sm sm:text-base">Pagamento</Label>
             <Input
               id="payday"
               placeholder="Dia de pagamento"
               v-model="form.payday"
               @input="formatPayday"
               maxlength="2"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
             />
-            <span v-if="form.errors.payday" class="text-red-500 text-sm">
+            <span
+              v-if="form.errors.payday"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.payday }}
             </span>
           </div>
+
+          <!-- Responsável -->
           <div class="flex flex-col space-y-1.5">
-            <Label>Responsável pela origem</Label>
-            <Select v-model="form.memberID">
-              <SelectTrigger class="w-full">
+            <Label class="text-sm sm:text-base">Responsável pela origem</Label>
+            <Select v-model="form.memberID" :disabled="form.processing">
+              <SelectTrigger class="w-full text-sm sm:text-base">
                 <SelectValue placeholder="Selecione um responsável" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent class="max-h-60 overflow-y-auto">
                 <SelectGroup>
-                  <SelectItem :value="null">Sem responsável</SelectItem>
+                  <SelectItem :value="null" class="text-sm sm:text-base">
+                    Sem responsável
+                  </SelectItem>
                   <SelectItem
                     v-for="(item, index) in members"
                     :value="item.id"
                     :key="index"
-                    >{{ item.name }}</SelectItem
+                    class="text-sm sm:text-base"
                   >
+                    {{ item.name }}
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
-            <span v-if="form.errors.role" class="text-red-500 text-sm">
+            <span
+              v-if="form.errors.role"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.role }}
             </span>
           </div>
         </div>
-        <DialogFooter>
-          <Button type="submit" class="w-full" :disabled="form.processing">
+
+        <DialogFooter class="px-4 pb-4">
+          <Button
+            type="submit"
+            class="w-full text-sm sm:text-base py-2"
+            :disabled="form.processing"
+          >
             {{ isEditing ? 'Atualizar' : 'Salvar' }}
           </Button>
         </DialogFooter>

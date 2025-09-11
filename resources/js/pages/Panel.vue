@@ -344,13 +344,18 @@
 </script>
 <template>
   <PanelLayout>
+    <!-- FILTROS -->
     <section class="px-6 mt-2">
       <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
-      <div class="flex items-center gap-x-2 bg-white p-4 rounded-lg shadow">
-        <div class="flex flex-col space-y-1.5">
+
+      <!-- responsividade: flex-col em telas pequenas, row em md+ -->
+      <div
+        class="flex flex-col md:flex-row md:items-center gap-4 bg-white p-4 rounded-lg shadow"
+      >
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
           <Label>Devedor</Label>
           <Select v-model="filters.memberID">
-            <SelectTrigger>
+            <SelectTrigger class="w-full md:w-[200px]">
               <SelectValue placeholder="Selecione um devedor" />
             </SelectTrigger>
             <SelectContent>
@@ -367,10 +372,11 @@
             </SelectContent>
           </Select>
         </div>
-        <div class="flex flex-col space-y-1.5">
+
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
           <Label>Origem</Label>
           <Select v-model="filters.originID">
-            <SelectTrigger>
+            <SelectTrigger class="w-full md:w-[200px]">
               <SelectValue placeholder="Selecione uma origem" />
             </SelectTrigger>
             <SelectContent>
@@ -387,10 +393,11 @@
             </SelectContent>
           </Select>
         </div>
-        <div class="flex flex-col space-y-1.5">
+
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
           <Label>Categoria</Label>
           <Select v-model="filters.categoryID">
-            <SelectTrigger>
+            <SelectTrigger class="w-full md:w-[200px]">
               <SelectValue placeholder="Selecione uma categoria" />
             </SelectTrigger>
             <SelectContent>
@@ -407,29 +414,31 @@
             </SelectContent>
           </Select>
         </div>
-        <div class="flex flex-col space-y-1.5">
+
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
           <Label>Mês</Label>
           <Select v-model="filters.month">
-            <SelectTrigger>
+            <SelectTrigger class="w-full md:w-[160px]">
               <SelectValue placeholder="Selecione um mês" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectItem :value="null">Todos os mêses</SelectItem>
+                <SelectItem :value="null">Todos os meses</SelectItem>
                 <SelectItem
                   v-for="(item, index) in months"
                   :value="item.value"
                   :key="index"
-                  >{{ item.label }}
-                </SelectItem>
+                  >{{ item.label }}</SelectItem
+                >
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <div class="flex flex-col space-y-1.5">
+
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
           <Label>Ano</Label>
           <Select v-model="filters.year">
-            <SelectTrigger>
+            <SelectTrigger class="w-full md:w-[140px]">
               <SelectValue placeholder="Selecione um ano" />
             </SelectTrigger>
             <SelectContent>
@@ -440,33 +449,40 @@
                   v-show="isNotCurrentYear(item)"
                   :value="item"
                   :key="index"
-                  >{{ item }}
-                </SelectItem>
+                  >{{ item }}</SelectItem
+                >
               </SelectGroup>
             </SelectContent>
           </Select>
         </div>
-        <div class="flex flex-col">
-          <Button class="cursor-pointer mt-4" @click="exportData">
-            <span>Exportar</span>
+
+        <!-- Botão exportar ocupa largura total no mobile -->
+        <div class="flex flex-col w-full md:w-auto">
+          <Button
+            class="cursor-pointer mt-4 w-full md:w-auto"
+            @click="exportData"
+          >
             <Download class="w-4 h-4 mr-2" />
+            <span>Exportar</span>
           </Button>
         </div>
       </div>
     </section>
+
+    <!-- CARDS -->
     <section class="p-6">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white p-4 rounded-lg shadow">
+        <div class="bg-white p-4 rounded-lg shadow text-center md:text-left">
           <h3 class="text-lg font-semibold">Divídas (Saída)</h3>
           <p class="text-3xl font-bold">
             {{ formatCurrency(currentMonthTotal) }}
           </p>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow">
+        <div class="bg-white p-4 rounded-lg shadow text-center md:text-left">
           <h3 class="text-lg font-semibold">Recebimentos (Entrada)</h3>
           <p class="text-3xl font-bold">{{ formatCurrency(currentReceipt) }}</p>
         </div>
-        <div class="bg-white p-4 rounded-lg shadow">
+        <div class="bg-white p-4 rounded-lg shadow text-center md:text-left">
           <h3 class="text-lg font-semibold">Saldo</h3>
           <p
             class="text-3xl font-bold"
@@ -480,19 +496,23 @@
         </div>
       </div>
     </section>
+
+    <!-- GRÁFICO -->
     <section class="px-6">
-      <div class="bg-white p-4 rounded-lg shadow">
+      <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
         <Bar
           id="my-chart-id"
           :options="chartOptions"
           :data="chartData"
-          style="height: 400px; max-height: 400px"
+          style="height: 400px; max-height: 400px; width: 100%"
         />
       </div>
     </section>
+
+    <!-- TABELA COM ROLAGEM HORIZONTAL -->
     <section class="my-2 px-6">
-      <div class="bg-white p-4 rounded-lg shadow">
-        <Table class="border-2 mt-2 bg-white">
+      <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+        <Table class="border-2 mt-2 bg-white min-w-[800px]">
           <TableCaption
             >Lista de movimentações : {{ getMovements.length }}</TableCaption
           >
@@ -509,12 +529,8 @@
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in paginatedMovements" :key="index">
-              <TableCell class="pl-8">
-                {{ item.date_buy }}
-              </TableCell>
-              <TableCell class="pl-8">
-                {{ item.period }}
-              </TableCell>
+              <TableCell class="pl-8">{{ item.date_buy }}</TableCell>
+              <TableCell class="pl-8">{{ item.period }}</TableCell>
               <TableCell class="pl-8">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
               </TableCell>
@@ -565,6 +581,8 @@
         </Table>
       </div>
     </section>
+
+    <!-- MODAL DETALHE -->
     <MovementDetails
       :movement="dataMovement"
       v-model:open="showMovementDetails"

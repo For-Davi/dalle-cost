@@ -60,53 +60,73 @@
 
 <template>
   <PanelLayout>
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Membros</h1>
-      <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
+    <div class="p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Membros</h1>
+
+      <section
+        class="bg-white p-3 sm:p-4 rounded-lg shadow flex justify-end gap-2"
+      >
         <FormMember
           :member="dataEdit"
           v-model:open="isFormMemberOpen"
           @close="setDataEdit(null, false)"
         />
-        <Button class="cursor-pointer" @click="openCreateForm">
+        <Button
+          class="cursor-pointer text-sm sm:text-base w-full sm:w-auto"
+          @click="openCreateForm"
+        >
+          <Plus class="w-4 h-4 mr-1 sm:mr-2" />
           <span>Novo membro</span>
-          <Plus class="w-4 h-4 mr-2" />
         </Button>
       </section>
-      <section class="mt-2">
-        <Table class="border-2 bg-white">
-          <TableCaption>Lista de membros : {{ members.length }}</TableCaption>
+
+      <section class="mt-2 overflow-x-auto">
+        <Table class="border-2 bg-white min-w-full">
+          <TableCaption class="text-sm sm:text-base">
+            Lista de membros : {{ members.length }}
+          </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="w-[80%] pl-8"> Nome </TableHead>
-              <TableHead class="w-[20%] pr-8 text-right">Ação</TableHead>
+              <TableHead
+                class="pl-4 sm:pl-8 w-full sm:w-[80%] text-sm sm:text-base"
+                >Nome</TableHead
+              >
+              <TableHead
+                class="pr-4 sm:pr-8 text-right w-auto sm:w-[20%] text-sm sm:text-base"
+                >Ação</TableHead
+              >
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in members" :key="index">
-              <TableCell class="pl-8">
+              <TableCell class="pl-4 sm:pl-8 text-sm sm:text-base">
                 {{ item.name }}
               </TableCell>
-              <TableCell class="pr-8 text-right">
+              <TableCell class="pr-4 sm:pr-8 text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" class="cursor-pointer">
-                      <Ellipsis />
+                    <Button variant="ghost" class="cursor-pointer h-8 w-8 p-0">
+                      <Ellipsis class="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent class="w-56">
-                    <DropdownMenuLabel>Opções</DropdownMenuLabel>
+                  <DropdownMenuContent class="w-48 sm:w-56">
+                    <DropdownMenuLabel class="text-xs sm:text-sm"
+                      >Opções</DropdownMenuLabel
+                    >
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="setDataEdit(item, true)">
-                        <Pencil class="w-4 h-4 mr-2" />
+                      <DropdownMenuItem
+                        @click="setDataEdit(item, true)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Pencil class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Editar</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        class="text-red-500"
+                        class="text-red-500 text-xs sm:text-sm"
                         @click="exclude(item.id)"
                       >
-                        <Trash class="w-4 h-4 mr-2" color="red" />
+                        <Trash class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Excluir</span>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>

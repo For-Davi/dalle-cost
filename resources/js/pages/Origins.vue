@@ -64,62 +64,90 @@
 
 <template>
   <PanelLayout>
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Origens</h1>
-      <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
+    <div class="p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Origens</h1>
+
+      <section
+        class="bg-white p-3 sm:p-4 rounded-lg shadow flex justify-end gap-2"
+      >
         <FormOrigin
           :origin="dataEdit"
           :members="members"
           v-model:open="isFormOriginOpen"
           @close="setDataEdit(null, false)"
         />
-        <Button class="cursor-pointer" @click="openCreateForm">
+        <Button
+          class="cursor-pointer text-sm sm:text-base w-full sm:w-auto"
+          @click="openCreateForm"
+        >
+          <Plus class="w-4 h-4 mr-1 sm:mr-2" />
           <span>Nova origem</span>
-          <Plus class="w-4 h-4 mr-2" />
         </Button>
       </section>
-      <section class="mt-2">
-        <Table class="border-2 bg-white">
-          <TableCaption>Lista de origens : {{ origins.length }}</TableCaption>
+
+      <section class="mt-2 overflow-x-auto">
+        <Table class="border-2 bg-white min-w-full">
+          <TableCaption class="text-sm sm:text-base">
+            Lista de origens : {{ origins.length }}
+          </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="w-[30%] pl-8"> Nome </TableHead>
-              <TableHead class="w-[30%] pl-8"> Responsável </TableHead>
-              <TableHead class="w-[20%] pl-8"> Dia de pagamento </TableHead>
-              <TableHead class="w-[20%] pr-8 text-right">Ação</TableHead>
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4"
+                >Nome</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden sm:table-cell"
+                >Responsável</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden md:table-cell"
+                >Dia de pagamento</TableHead
+              >
+              <TableHead class="text-sm sm:text-base px-2 sm:pr-4 text-right"
+                >Ação</TableHead
+              >
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in origins" :key="index">
-              <TableCell class="pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4">
                 {{ item.name }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden sm:table-cell"
+              >
                 {{ item.member ? item.member.name : 'Sem responsável' }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden md:table-cell"
+              >
                 {{ item.payday }}
               </TableCell>
-              <TableCell class="pr-8 text-right">
+              <TableCell class="px-2 sm:pr-4 text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" class="cursor-pointer">
-                      <Ellipsis />
+                    <Button variant="ghost" class="cursor-pointer h-8 w-8 p-0">
+                      <Ellipsis class="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent class="w-56">
-                    <DropdownMenuLabel>Opções</DropdownMenuLabel>
+                  <DropdownMenuContent class="w-48 sm:w-56">
+                    <DropdownMenuLabel class="text-xs sm:text-sm"
+                      >Opções</DropdownMenuLabel
+                    >
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="setDataEdit(item, true)">
-                        <Pencil class="w-4 h-4 mr-2" />
+                      <DropdownMenuItem
+                        @click="setDataEdit(item, true)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Pencil class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Editar</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        class="text-red-500"
+                        class="text-red-500 text-xs sm:text-sm"
                         @click="exclude(item.id)"
                       >
-                        <Trash class="w-4 h-4 mr-2" color="red" />
+                        <Trash class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Excluir</span>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>

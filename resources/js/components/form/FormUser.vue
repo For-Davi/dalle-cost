@@ -84,13 +84,15 @@
 
 <template>
   <Dialog :open="open" @update:open="value => $emit('close', value)">
-    <DialogContent class="sm:max-w-[425px]">
-      <form @submit.prevent="submit">
-        <DialogHeader>
-          <DialogTitle class="font-bold">
+    <DialogContent
+      class="sm:max-w-[450px] max-w-[95vw] max-h-[90vh] overflow-hidden"
+    >
+      <form @submit.prevent="submit" class="p-1">
+        <DialogHeader class="px-4 pt-4">
+          <DialogTitle class="font-bold text-lg sm:text-xl">
             {{ isEditing ? 'Editar Usuário' : 'Novo Usuário' }}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription class="text-sm sm:text-base">
             {{
               isEditing
                 ? 'Atualize os dados do usuário'
@@ -98,42 +100,80 @@
             }}
           </DialogDescription>
         </DialogHeader>
-        <div class="grid gap-4 py-4">
+
+        <div class="grid gap-4 py-4 px-4">
+          <!-- Nome -->
           <div class="flex flex-col space-y-1.5">
-            <Label for="name">Nome</Label>
-            <Input id="name" placeholder="Nome completo" v-model="form.name" />
-            <span v-if="form.errors.name" class="text-red-500 text-sm">
+            <Label for="name" class="text-sm sm:text-base">Nome</Label>
+            <Input
+              id="name"
+              placeholder="Nome completo"
+              v-model="form.name"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
+            />
+            <span
+              v-if="form.errors.name"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.name }}
             </span>
           </div>
 
+          <!-- E-mail -->
           <div class="flex flex-col space-y-1.5">
-            <Label for="email">E-mail</Label>
-            <Input id="email" placeholder="E-mail" v-model="form.email" />
-            <span v-if="form.errors.email" class="text-red-500 text-sm">
+            <Label for="email" class="text-sm sm:text-base">E-mail</Label>
+            <Input
+              id="email"
+              placeholder="E-mail"
+              v-model="form.email"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
+            />
+            <span
+              v-if="form.errors.email"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.email }}
             </span>
           </div>
 
+          <!-- Senha (apenas para novo usuário) -->
           <div v-if="!props.user" class="flex flex-col space-y-1.5">
-            <Label for="password">Senha</Label>
+            <Label for="password" class="text-sm sm:text-base">Senha</Label>
             <Input
               id="password"
               placeholder="Senha"
               type="password"
               v-model="form.password"
+              class="w-full text-sm sm:text-base"
+              :disabled="form.processing"
             />
-            <span v-if="form.errors.password" class="text-red-500 text-sm">
+            <span
+              v-if="form.errors.password"
+              class="text-red-500 text-xs sm:text-sm"
+            >
               {{ form.errors.password }}
             </span>
-            <p v-if="isEditing" class="text-xs text-gray-500">
+          </div>
+
+          <!-- Mensagem para edição -->
+          <div
+            v-if="isEditing && !props.user"
+            class="flex flex-col space-y-1.5"
+          >
+            <p class="text-xs text-gray-500 sm:text-sm">
               Deixe em branco para manter a senha atual
             </p>
           </div>
         </div>
 
-        <DialogFooter>
-          <Button type="submit" class="w-full" :disabled="form.processing">
+        <DialogFooter class="px-4 pb-4">
+          <Button
+            type="submit"
+            class="w-full text-sm sm:text-base py-2"
+            :disabled="form.processing"
+          >
             {{ isEditing ? 'Atualizar' : 'Salvar' }}
           </Button>
         </DialogFooter>

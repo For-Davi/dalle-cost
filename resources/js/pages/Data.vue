@@ -97,18 +97,18 @@
   const setPage = page => {
     currentPage.value = page
   }
-  const getInstallmentColor = (installment) => {
-    if (!installment) return '';
-    
-    const parts = installment.split('/');
-    if (parts.length !== 2) return 'text-red-500';
-    
-    const left = parseInt(parts[0]);
-    const right = parseInt(parts[1]);
-    
-    if (isNaN(left) || isNaN(right)) return 'text-red-500';
-    
-    return left === right ? 'text-green-500' : 'text-red-500';
+  const getInstallmentColor = installment => {
+    if (!installment) return ''
+
+    const parts = installment.split('/')
+    if (parts.length !== 2) return 'text-red-500'
+
+    const left = parseInt(parts[0])
+    const right = parseInt(parts[1])
+
+    if (isNaN(left) || isNaN(right)) return 'text-red-500'
+
+    return left === right ? 'text-green-500' : 'text-red-500'
   }
 
   const getMovements = computed(() => {
@@ -140,9 +140,12 @@
 
 <template>
   <PanelLayout>
-    <div class="p-6">
-      <h1 class="text-2xl font-bold mb-6">Dados</h1>
-      <section class="bg-white p-4 rounded-lg shadow flex justify-end gap-2">
+    <div class="p-4 sm:p-6">
+      <h1 class="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Dados</h1>
+
+      <section
+        class="bg-white p-3 sm:p-4 rounded-lg shadow flex flex-col sm:flex-row gap-3 sm:gap-2 items-stretch sm:items-center"
+      >
         <FormMovement
           :open="isFormMovementOpen"
           :movement="dataEdit"
@@ -151,13 +154,16 @@
           :categories="categories"
           @close="setDataEdit(null, false)"
         />
-        <div class="relative w-full max-w-sm items-center">
+
+        <div
+          class="relative w-full sm:max-w-sm items-center order-2 sm:order-1"
+        >
           <Input
             id="search"
             type="text"
             v-model="search"
             placeholder="Filtre os resultados"
-            class="pl-10"
+            class="pl-10 text-sm sm:text-base"
           />
           <span
             class="absolute start-0 inset-y-0 flex items-center justify-center px-2"
@@ -165,75 +171,118 @@
             <Search class="size-4 text-muted-foreground" />
           </span>
         </div>
-        <Button class="cursor-pointer" @click="openCreateForm">
+
+        <Button
+          class="cursor-pointer text-sm sm:text-base order-1 sm:order-2 w-full sm:w-auto"
+          @click="openCreateForm"
+        >
+          <Plus class="w-4 h-4 mr-1 sm:mr-2" />
           <span>Novo lançamento</span>
-          <Plus class="w-4 h-4 mr-2" />
         </Button>
       </section>
-      <section class="mt-2">
-        <Table class="border-2 bg-white">
-          <TableCaption
-            >Lista de movimentações : {{ getMovements.length }}</TableCaption
-          >
+
+      <section class="mt-2 overflow-x-auto">
+        <Table class="border-2 bg-white min-w-full">
+          <TableCaption class="text-sm sm:text-base px-2 sm:px-4">
+            Lista de movimentações : {{ getMovements.length }}
+          </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="pl-8"> Data de compra </TableHead>
-              <TableHead class="pl-8"> Parcela </TableHead>
-              <TableHead class="pl-8"> Período </TableHead>
-              <TableHead class="pl-8"> Devedor </TableHead>
-              <TableHead class="pl-8"> Origem </TableHead>
-              <TableHead class="pl-8"> Categoria </TableHead>
-              <TableHead class="pl-8"> Valor </TableHead>
-              <TableHead class="pr-8 text-right">Ação</TableHead>
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+                >Data</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden md:table-cell"
+                >Parcela</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden lg:table-cell"
+                >Período</TableHead
+              >
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+                >Devedor</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                >Origem</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                >Categoria</TableHead
+              >
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+                >Valor</TableHead
+              >
+              <TableHead
+                class="text-sm sm:text-base px-2 sm:pr-4 sm:pr-8 text-right"
+                >Ação</TableHead
+              >
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in paginatedMovements" :key="index">
-              <TableCell class="pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
                 {{ item.date_buy }}
               </TableCell>
-              <TableCell class="pl-8 font-bold" :class="getInstallmentColor(item.installment)">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 font-bold hidden md:table-cell"
+                :class="getInstallmentColor(item.installment)"
+              >
                 {{ item.installment ?? '' }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden lg:table-cell"
+              >
                 {{ item.period }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+              >
                 {{ item.origin ? item.origin.name : 'Sem origem' }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell
+                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+              >
                 {{ item.category ? item.category.name : 'Sem categoria' }}
               </TableCell>
-              <TableCell class="pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
                 {{ formatCurrency(item.value) }}
               </TableCell>
-              <TableCell class="pr-8 text-right">
+              <TableCell class="px-2 sm:pr-4 sm:pr-8 text-right">
                 <DropdownMenu>
                   <DropdownMenuTrigger as-child>
-                    <Button variant="ghost" class="cursor-pointer">
-                      <Ellipsis />
+                    <Button variant="ghost" class="cursor-pointer h-8 w-8 p-0">
+                      <Ellipsis class="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent class="w-56">
-                    <DropdownMenuLabel>Opções</DropdownMenuLabel>
+                  <DropdownMenuContent class="w-48 sm:w-56">
+                    <DropdownMenuLabel class="text-xs sm:text-sm"
+                      >Opções</DropdownMenuLabel
+                    >
                     <DropdownMenuSeparator />
                     <DropdownMenuGroup>
-                      <DropdownMenuItem @click="showMovement(true, item)">
-                        <Eye class="w-4 h-4 mr-2" />
+                      <DropdownMenuItem
+                        @click="showMovement(true, item)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Eye class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Detalhes</span>
                       </DropdownMenuItem>
-                      <DropdownMenuItem @click="setDataEdit(item, true)">
-                        <Pencil class="w-4 h-4 mr-2" />
+                      <DropdownMenuItem
+                        @click="setDataEdit(item, true)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Pencil class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Editar</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        class="text-red-500"
+                        class="text-red-500 text-xs sm:text-sm"
                         @click="exclude(item.id)"
                       >
-                        <Trash class="w-4 h-4 mr-2" color="red" />
+                        <Trash class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
                         <span>Excluir</span>
                       </DropdownMenuItem>
                     </DropdownMenuGroup>
@@ -244,30 +293,35 @@
           </TableBody>
           <TableFooter class="bg-white">
             <Pagination
-              class="my-2"
+              class="my-2 px-2 sm:px-4"
               :items-per-page="itensPerPage"
               :total="getMovements.length"
               :default-page="1"
               @update:page="setPage"
             >
               <PaginationContent v-slot="{ items }">
-                <PaginationPrevious />
+                <PaginationPrevious class="h-8 w-8 p-0 sm:h-10 sm:w-10" />
                 <template v-for="(item, index) in items" :key="index">
                   <PaginationItem
                     v-if="item.type === 'page'"
                     :value="item.value"
                     :is-active="item.value === page"
+                    class="h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm"
                   >
                     {{ item.value }}
                   </PaginationItem>
                 </template>
-                <PaginationEllipsis :index="4" />
-                <PaginationNext />
+                <PaginationEllipsis
+                  :index="4"
+                  class="h-8 w-8 sm:h-10 sm:w-10"
+                />
+                <PaginationNext class="h-8 w-8 p-0 sm:h-10 sm:w-10" />
               </PaginationContent>
             </Pagination>
           </TableFooter>
         </Table>
       </section>
+
       <MovementDetails
         :movement="dataMovement"
         v-model:open="showMovementDetails"
