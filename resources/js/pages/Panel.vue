@@ -561,6 +561,7 @@
               :total="getMovements.length"
               :default-page="1"
               @update:page="setPage"
+              v-slot="{ page }"
             >
               <PaginationContent v-slot="{ items }">
                 <PaginationPrevious />
@@ -569,6 +570,9 @@
                     v-if="item.type === 'page'"
                     :value="item.value"
                     :is-active="item.value === page"
+                    :class="{
+                      'border-1 border-primary': item.value === page,
+                    }"
                   >
                     {{ item.value }}
                   </PaginationItem>

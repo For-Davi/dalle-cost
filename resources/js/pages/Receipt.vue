@@ -219,29 +219,29 @@
           </TableBody>
           <TableFooter class="bg-white">
             <Pagination
-              class="my-2 px-2 sm:px-4"
+              class="my-2"
               :items-per-page="itensPerPage"
               :total="getReceipts.length"
               :default-page="1"
               @update:page="setPage"
+              v-slot="{ page }"
             >
               <PaginationContent v-slot="{ items }">
-                <PaginationPrevious class="h-8 w-8 p-0 sm:h-10 sm:w-10" />
+                <PaginationPrevious />
                 <template v-for="(item, index) in items" :key="index">
                   <PaginationItem
                     v-if="item.type === 'page'"
                     :value="item.value"
                     :is-active="item.value === page"
-                    class="h-8 w-8 sm:h-10 sm:w-10 text-xs sm:text-sm"
+                    :class="{
+                      'border-1 border-primary': item.value === page,
+                    }"
                   >
                     {{ item.value }}
                   </PaginationItem>
                 </template>
-                <PaginationEllipsis
-                  :index="4"
-                  class="h-8 w-8 sm:h-10 sm:w-10"
-                />
-                <PaginationNext class="h-8 w-8 p-0 sm:h-10 sm:w-10" />
+                <PaginationEllipsis :index="4" />
+                <PaginationNext />
               </PaginationContent>
             </Pagination>
           </TableFooter>
