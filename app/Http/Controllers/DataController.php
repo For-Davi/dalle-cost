@@ -40,31 +40,30 @@ class DataController
             $date = Carbon::createFromDate($year, $month, 1);
 
             for ($i = 0; $i < $request->quantity; $i++) {
-                $installment = $request->quantity == 1 ? "1/1" : (($i + 1) . '/' . $request->quantity);
+                $installment = $request->quantity == 1 ? '1/1' : (($i + 1).'/'.$request->quantity);
 
                 Movement::create([
-                    'value'       => $request->value,
-                    'date_buy'    => $request->dateBuy,
-                    'member_id'   => $request->memberID,
-                    'origin_id'   => $request->originID,
+                    'value' => $request->value,
+                    'date_buy' => $request->dateBuy,
+                    'member_id' => $request->memberID,
+                    'origin_id' => $request->originID,
                     'category_id' => $request->categoryID,
                     'description' => $request->description,
-                    'period'      => $date->format('m/Y'),
-                    'installment' => $installment
+                    'period' => $date->format('m/Y'),
+                    'installment' => $installment,
                 ]);
 
                 $date->addMonth();
             }
 
             return redirect()->route('panel.data')
-                            ->with('success', 'Movimentação(s) criada(s) com sucesso');
+                ->with('success', 'Movimentação(s) criada(s) com sucesso');
         } catch (Exception $e) {
             return back()->withErrors([
                 'error' => 'Ocorreu um erro ao registrar movimentação. Por favor, tente novamente.',
             ]);
         }
     }
-
 
     public function update(UpdateMovementRequest $request)
     {

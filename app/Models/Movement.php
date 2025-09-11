@@ -21,7 +21,7 @@ class Movement extends Authenticatable
         'category_id',
         'date_buy',
         'description',
-        'installment'
+        'installment',
     ];
 
     public function member()
