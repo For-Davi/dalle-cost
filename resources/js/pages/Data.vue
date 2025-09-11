@@ -97,6 +97,19 @@
   const setPage = page => {
     currentPage.value = page
   }
+  const getInstallmentColor = (installment) => {
+    if (!installment) return '';
+    
+    const parts = installment.split('/');
+    if (parts.length !== 2) return 'text-red-500';
+    
+    const left = parseInt(parts[0]);
+    const right = parseInt(parts[1]);
+    
+    if (isNaN(left) || isNaN(right)) return 'text-red-500';
+    
+    return left === right ? 'text-green-500' : 'text-red-500';
+  }
 
   const getMovements = computed(() => {
     if (search.value !== '') {
@@ -110,7 +123,8 @@
           item.description?.toLowerCase().includes(query) ||
           item.category?.name?.toLowerCase().includes(query) ||
           item.member?.name?.toLowerCase().includes(query) ||
-          item.origin?.name?.toLowerCase().includes(query)
+          item.origin?.name?.toLowerCase().includes(query) ||
+          (item.installment && item.installment.toLowerCase().includes(query))
         )
       })
     }
@@ -178,7 +192,7 @@
               <TableCell class="pl-8">
                 {{ item.date_buy }}
               </TableCell>
-              <TableCell class="pl-8 font-bold" :class="item.installment && item.installment === '1/1' ? 'text-green-500' : 'text-red-500'">
+              <TableCell class="pl-8 font-bold" :class="getInstallmentColor(item.installment)">
                 {{ item.installment ?? '' }}
               </TableCell>
               <TableCell class="pl-8">
