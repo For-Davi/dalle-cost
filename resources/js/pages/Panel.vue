@@ -327,6 +327,52 @@
       },
     },
   })
+  const chartOptionsCategory = ref({
+    responsive: true,
+    indexAxis: 'y',
+    plugins: {
+      legend: {
+        position: 'top',
+      },
+      title: {
+        display: true,
+        text: 'Custos por categorias',
+      },
+    },
+  })
+  const chartDataByCategory = computed(() => {
+    const grouped = getMovements.value.reduce((acc, item) => {
+      const categoryName =
+        item.category && item.category.name
+          ? item.category.name
+          : 'Sem Categoria'
+      const cost = parseFloat(item.value)
+      if (acc[categoryName]) {
+        acc[categoryName] += cost
+      } else {
+        acc[categoryName] = cost
+      }
+      return acc
+    }, {})
+
+    const sortedCategories = Object.keys(grouped).sort(
+      (a, b) => grouped[b] - grouped[a]
+    )
+
+    return {
+      labels: sortedCategories,
+      datasets: [
+        {
+          label: 'Valor x Categoria',
+          data: sortedCategories.map(category => grouped[category]),
+          backgroundColor: '#ef4444',
+          borderRadius: 5,
+          barPercentage: 0.7,
+        },
+      ],
+    }
+  })
+
   const months = computed(() => [
     { value: 1, label: 'Janeiro' },
     { value: 2, label: 'Fevereiro' },
@@ -501,9 +547,15 @@
     <section class="px-6">
       <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
         <Bar
-          id="my-chart-id"
           :options="chartOptions"
           :data="chartData"
+          style="height: 400px; max-height: 400px; width: 100%"
+        />
+      </div>
+      <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+        <Bar
+          :options="chartOptionsCategory"
+          :data="chartDataByCategory"
           style="height: 400px; max-height: 400px; width: 100%"
         />
       </div>

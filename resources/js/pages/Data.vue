@@ -188,67 +188,66 @@
           </TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4"
                 >Data</TableHead
               >
               <TableHead
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden md:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden md:table-cell"
                 >Parcela</TableHead
               >
               <TableHead
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden lg:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden lg:table-cell"
                 >Período</TableHead
               >
-              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4"
                 >Devedor</TableHead
               >
               <TableHead
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden xl:table-cell"
                 >Origem</TableHead
               >
               <TableHead
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden xl:table-cell"
                 >Categoria</TableHead
               >
-              <TableHead class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8"
+              <TableHead class="text-sm sm:text-base px-2 sm:pl-4"
                 >Valor</TableHead
               >
-              <TableHead
-                class="text-sm sm:text-base px-2 sm:pr-4 sm:pr-8 text-right"
+              <TableHead class="text-sm sm:text-base px-2 sm:pr-4 text-right"
                 >Ação</TableHead
               >
             </TableRow>
           </TableHeader>
           <TableBody>
             <TableRow v-for="(item, index) in paginatedMovements" :key="index">
-              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4">
                 {{ item.date_buy }}
               </TableCell>
               <TableCell
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 font-bold hidden md:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 font-bold hidden md:table-cell"
                 :class="getInstallmentColor(item.installment)"
               >
                 {{ item.installment ?? '' }}
               </TableCell>
               <TableCell
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden lg:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden lg:table-cell"
               >
                 {{ item.period }}
               </TableCell>
-              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4">
                 {{ item.member ? item.member.name : 'Sem responsável' }}
               </TableCell>
               <TableCell
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden xl:table-cell"
               >
                 {{ item.origin ? item.origin.name : 'Sem origem' }}
               </TableCell>
               <TableCell
-                class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8 hidden xl:table-cell"
+                class="text-sm sm:text-base px-2 sm:pl-4 hidden xl:table-cell"
               >
                 {{ item.category ? item.category.name : 'Sem categoria' }}
               </TableCell>
-              <TableCell class="text-sm sm:text-base px-2 sm:pl-4 sm:pl-8">
+              <TableCell class="text-sm sm:text-base px-2 sm:pl-4">
                 {{ formatCurrency(item.value) }}
               </TableCell>
               <TableCell class="px-2 sm:pr-4 sm:pr-8 text-right">
