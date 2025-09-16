@@ -92,6 +92,7 @@
     categoryID: 0,
     year: null,
     month: null,
+    payday: null
   })
 
   const formatCurrency = value => {
@@ -201,6 +202,14 @@
       list = list.filter(item => {
         const periodYear = parseInt(item.period?.split('/')[1])
         return periodYear === selectedYear
+      })
+    }
+
+    if (filters.payday !== null) {
+      const selectedPayday = String(filters.payday)
+      
+      list = list.filter(item => {
+        return item.origin?.payday === selectedPayday
       })
     }
 
@@ -387,6 +396,10 @@
     { value: 11, label: 'Novemebro' },
     { value: 12, label: 'Dezembro' },
   ])
+
+  const days = computed(() => 
+    Array.from({ length: 31 }, (_, i) => i + 1)
+  )
 </script>
 <template>
   <PanelLayout>
@@ -475,6 +488,26 @@
                   :value="item.value"
                   :key="index"
                   >{{ item.label }}</SelectItem
+                >
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div class="flex flex-col space-y-1.5 w-full md:w-auto">
+          <Label>Dia de pagamento</Label>
+          <Select v-model="filters.payday">
+            <SelectTrigger class="w-full md:w-[160px]">
+              <SelectValue placeholder="Selecione dia de pagamento" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem :value="null">Todos os dias</SelectItem>
+                <SelectItem
+                  v-for="(item, index) in days"
+                  :value="String(item)"
+                  :key="index"
+                  >{{ item }}</SelectItem
                 >
               </SelectGroup>
             </SelectContent>
