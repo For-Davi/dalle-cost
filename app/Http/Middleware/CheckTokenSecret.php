@@ -12,7 +12,7 @@ class CheckTokenSecret
     {
         $token = $request->header('token_secret');
 
-        $envToken = config('api.token_secret');
+        $envToken = config('app.token_secret');
 
         if (! $token || $token !== $envToken) {
             return response()->json([
