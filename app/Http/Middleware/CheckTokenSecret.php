@@ -10,7 +10,7 @@ class CheckTokenSecret
 {
     public function handle(Request $request, Closure $next): Response
     {
-        $token = $request->header('token_secret');
+        $token = $request->bearerToken();
 
         $envToken = config('app.token_secret');
 
