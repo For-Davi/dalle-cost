@@ -1,7 +1,7 @@
 <script setup>
   import PanelLayout from '@/layout/PanelLayout.vue'
   import Button from '@/components/ui/button/Button.vue'
-  import { Ellipsis, Pencil, Trash } from 'lucide-vue-next'
+  import { Ellipsis, Pencil, Trash, Link } from 'lucide-vue-next'
   import { router } from '@inertiajs/vue3'
   import { Plus, Eye } from 'lucide-vue-next'
   import {
@@ -35,6 +35,7 @@
   import { toast } from 'vue-sonner'
   import FormMovement from '@/components/form/FormMovement.vue'
   import MovementDetails from '@/components/general/MovementDetails.vue'
+  import LinkedInstallments from '@/components/general/LinkedInstallments.vue'
   import { Search } from 'lucide-vue-next'
   import { Input } from '@/components/ui/input'
 
@@ -68,6 +69,8 @@
   const dataMovement = ref(null)
   const showMovementDetails = ref(false)
   const currentPage = ref(1)
+  const linkedMovement = ref(null)
+  const showLinkedInstallments = ref(false)
 
   const setDataEdit = (movement, open) => {
     dataEdit.value = movement
@@ -82,6 +85,12 @@
   const showMovement = (open, movement) => {
     dataMovement.value = movement
     showMovementDetails.value = open
+  }
+  const getSiblings = groupId =>
+    props.movements.filter(m => m.group_id && m.group_id === groupId)
+  const showLinked = (open, movement) => {
+    linkedMovement.value = movement
+    showLinkedInstallments.value = open
   }
   const openCreateForm = () => {
     dataEdit.value = null
@@ -271,6 +280,14 @@
                         <span>Detalhes</span>
                       </DropdownMenuItem>
                       <DropdownMenuItem
+                        v-if="getSiblings(item.group_id).length > 1"
+                        @click="showLinked(true, item)"
+                        class="text-xs sm:text-sm"
+                      >
+                        <Link class="w-3 h-3 sm:w-4 sm:h-4 mr-2" />
+                        <span>Parcelas vinculadas</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
                         @click="setDataEdit(item, true)"
                         class="text-xs sm:text-sm"
                       >
@@ -325,6 +342,13 @@
         :movement="dataMovement"
         v-model:open="showMovementDetails"
         @close="showMovement(false, null)"
+      />
+
+      <LinkedInstallments
+        :movement="linkedMovement"
+        :siblings="getSiblings(linkedMovement?.group_id)"
+        v-model:open="showLinkedInstallments"
+        @close="showLinked(false, null)"
       />
     </div>
   </PanelLayout>

@@ -94,6 +94,20 @@
       })
     }
   }
+  const clampQuantity = event => {
+    let value = event.target.value.replace(/\D/g, '')
+
+    if (value === '') {
+      form.quantity = ''
+      return
+    }
+
+    let quantity = parseInt(value, 10)
+    if (quantity < 1) quantity = 1
+    if (quantity > 1000) quantity = 1000
+
+    form.quantity = quantity
+  }
   const onlyNumbers = e => {
     const value = e.target.value
 
@@ -286,30 +300,24 @@
 
             <!-- Quantidade de lançamentos (se novo) -->
             <div v-if="!props.movement" class="flex flex-col space-y-1.5">
-              <Label class="text-sm sm:text-base"
+              <Label for="quantity" class="text-sm sm:text-base"
                 >Quantidade de lançamentos</Label
               >
-              <Select v-model="form.quantity">
-                <SelectTrigger class="w-full text-sm sm:text-base">
-                  <SelectValue placeholder="Selecione a quantidade" />
-                </SelectTrigger>
-                <SelectContent class="max-h-60 overflow-y-auto">
-                  <SelectGroup>
-                    <SelectItem :value="1">Apenas 1</SelectItem>
-                    <SelectItem :value="2">...2</SelectItem>
-                    <SelectItem :value="3">...3</SelectItem>
-                    <SelectItem :value="4">...4</SelectItem>
-                    <SelectItem :value="5">...5</SelectItem>
-                    <SelectItem :value="6">...6</SelectItem>
-                    <SelectItem :value="7">...7</SelectItem>
-                    <SelectItem :value="8">...8</SelectItem>
-                    <SelectItem :value="9">...9</SelectItem>
-                    <SelectItem :value="10">...10</SelectItem>
-                    <SelectItem :value="11">...11</SelectItem>
-                    <SelectItem :value="12">...12</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <Input
+                id="quantity"
+                type="text"
+                inputmode="numeric"
+                placeholder="Entre 1 e 1000"
+                v-model="form.quantity"
+                @input="clampQuantity"
+                class="w-full text-sm sm:text-base"
+              />
+              <span
+                v-if="form.errors.quantity"
+                class="text-red-500 text-xs sm:text-sm"
+              >
+                {{ form.errors.quantity }}
+              </span>
             </div>
 
             <!-- Devedor -->

@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/', [DataController::class, 'store'])->name('store');
         Route::put('/{dataID}', [DataController::class, 'update'])->name('update');
         Route::delete('/{dataID}', [DataController::class, 'destroy'])->name('destroy');
+        Route::delete('/group/{groupID}/installments', [DataController::class, 'destroyInstallments'])->name('destroyInstallments');
     });
 
     Route::prefix('dashboard')->name('dashboard.')->group(function () {

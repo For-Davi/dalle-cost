@@ -9,7 +9,9 @@ use App\Models\Member;
 use App\Models\Movement;
 use App\Models\Origin;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class DataController
@@ -38,6 +40,7 @@ class DataController
             [$month, $year] = explode('/', $request->period);
 
             $date = Carbon::createFromDate($year, $month, 1);
+            $groupId = (string) Str::uuid();
 
             for ($i = 0; $i < $request->quantity; $i++) {
                 $installment = $request->quantity == 1 ? '1/1' : (($i + 1).'/'.$request->quantity);
@@ -51,6 +54,7 @@ class DataController
                     'description' => $request->description,
                     'period' => $date->format('m/Y'),
                     'installment' => $installment,
+                    'group_id' => $groupId,
                 ]);
 
                 $date->addMonth();
@@ -100,6 +104,27 @@ class DataController
         } catch (Exception $e) {
             return back()->withErrors([
                 'error' => 'Ocorreu um erro ao excluir movimentação. Por favor, tente novamente.',
+            ]);
+        }
+    }
+
+    public function destroyInstallments(Request $request, string $groupID)
+    {
+        $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer',
+        ]);
+
+        try {
+            $deleted = Movement::where('group_id', $groupID)
+                ->whereIn('id', $request->input('ids'))
+                ->delete();
+
+            return redirect()->route('panel.data')
+                ->with('success', "{$deleted} parcela(s) excluída(s) com sucesso");
+        } catch (Exception $e) {
+            return back()->withErrors([
+                'error' => 'Ocorreu um erro ao excluir as parcelas selecionadas. Por favor, tente novamente.',
             ]);
         }
     }

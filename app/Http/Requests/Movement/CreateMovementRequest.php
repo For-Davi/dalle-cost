@@ -19,7 +19,7 @@ class CreateMovementRequest extends FormRequest
                 'required',
                 'regex:/^(0[1-9]|1[0-2])\/\d{4}$/', // mm/yyyy
             ],
-            'quantity' => 'required|integer|min:1|max:12',
+            'quantity' => 'required|integer|min:1|max:1000',
             'memberID' => 'nullable|exists:members,id',
             'originID' => 'nullable|exists:origins,id',
             'categoryID' => 'nullable|exists:categories,id',
@@ -44,7 +44,7 @@ class CreateMovementRequest extends FormRequest
             'quantity.required' => 'A quantidade é obrigatória',
             'quantity.integer' => 'A quantidade deve ser um número inteiro',
             'quantity.min' => 'A quantidade mínima permitida é 1',
-            'quantity.max' => 'A quantidade máxima permitida é 12',
+            'quantity.max' => 'A quantidade máxima permitida é 1000',
 
             'memberID.exists' => 'O membro selecionado não existe',
 

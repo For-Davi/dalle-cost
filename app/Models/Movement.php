@@ -22,7 +22,13 @@ class Movement extends Authenticatable
         'date_buy',
         'description',
         'installment',
+        'group_id',
     ];
+
+    public function linkedInstallments()
+    {
+        return $this->hasMany(Movement::class, 'group_id', 'group_id');
+    }
 
     public function member()
     {
